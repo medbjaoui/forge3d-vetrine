@@ -2,9 +2,9 @@ import { useEffect, useRef, useState } from 'react';
 import { ArrowRight, ChevronDown, CheckCircle2, Zap, Shield, Award } from 'lucide-react';
 
 const ADVANTAGES = [
-  { icon: Zap, text: 'Livraison en 24-48h' },
-  { icon: Shield, text: 'Qualité certifiée ISO' },
-  { icon: Award, text: '+500 projets réalisés' },
+  { icon: Shield, text: 'Infrastructure sécurisée & surveillée 24/7' },
+  { icon: Zap, text: 'Support technique réactif' },
+  { icon: Award, text: '+500 projets livrés' },
 ];
 
 const STATS = [
@@ -93,14 +93,14 @@ export default function Hero() {
             className="inline-flex items-center gap-2 bg-forge-orange/10 border border-forge-orange/25 text-forge-orange text-sm font-semibold px-4 py-2 rounded-full mb-8 animate-fade-in"
           >
             <span className="w-2 h-2 bg-forge-orange rounded-full animate-pulse" />
-            Solutions d'Impression 3D Professionnelles
+            Sous-traitance IT & Impression 3D
           </div>
 
           {/* Main headline */}
           <h1 className="text-5xl sm:text-6xl lg:text-7xl font-display font-bold text-white leading-tight mb-6 animate-fade-in-up">
-            Forgez l'Avenir avec
+            Votre Partenaire Tech
             <br />
-            <span className="text-gradient">l'Impression 3D</span>
+            <span className="text-gradient">IT & Fabrication 3D</span>
           </h1>
 
           {/* Subheadline */}
@@ -108,9 +108,9 @@ export default function Hero() {
             className="text-lg sm:text-xl text-white/65 max-w-2xl mb-8 animate-fade-in-up"
             style={{ animationDelay: '0.1s' }}
           >
-            Transformez vos idées en produits réels. Prototypage rapide, production en série
-            et fabrication de pièces techniques sur mesure — de l'esquisse au produit fini
-            en un temps record.
+            Forge3D, société tunisienne à double expertise : sous-traitance informatique
+            (infrastructure, cybersécurité, cloud) et fabrication 3D à la demande (prototypes,
+            figurines, pièces techniques). Un partenaire unique pour vos besoins tech.
           </p>
 
           {/* Advantages list */}

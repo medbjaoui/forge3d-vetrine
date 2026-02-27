@@ -84,19 +84,42 @@ npm run build
 Copier `.env.example` en `.env` et remplir les valeurs :
 
 ```env
-# Formulaire de contact – EmailJS (Option A, recommandé)
+# Informations de contact
+VITE_CONTACT_EMAIL=contact@forge3d.tech
+VITE_CONTACT_PHONE=+216 25 504 839
+VITE_CONTACT_ADDRESS=Tunisie
+
+# SMTP Configuration OVH (Option 1 - Backend requis)
+VITE_SMTP_HOST=pro3.mail.ovh.net
+VITE_SMTP_PORT=587
+VITE_SMTP_USER=contact@forge3d.tech
+VITE_SMTP_PASSWORD=your_password_here
+VITE_SMTP_FROM=contact@forge3d.tech
+VITE_SMTP_FROM_NAME=Forge3D
+
+# EmailJS (Option 2 - Recommandé pour frontend)
 VITE_EMAILJS_SERVICE_ID=service_xxxxxxx
 VITE_EMAILJS_TEMPLATE_ID=template_xxxxxxx
 VITE_EMAILJS_PUBLIC_KEY=xxxxxxxxxxxxxxxxxxxxxx
 
-# Formulaire de contact – Formspree (Option B, fallback)
+# Formspree (Option 3 - Fallback)
 VITE_FORMSPREE_ID=
 
-# Google Analytics 4 (optionnel)
+# Analytics (optionnel)
 VITE_GA_MEASUREMENT_ID=G-XXXXXXXXXX
 ```
 
-### Configurer EmailJS (recommandé)
+### Configuration SMTP OVH
+
+**Serveur:** `pro3.mail.ovh.net`
+**Port:** `587` (STARTTLS)
+**Utilisateur:** `contact@forge3d.tech`
+**Connexion sécurisée:** TLS/SSL
+
+⚠️ **Note:** L'envoi SMTP direct depuis le frontend n'est pas possible pour des raisons de sécurité.
+Utilisez **EmailJS** (Option 2) qui gère le SMTP côté serveur, ou créez un backend API.
+
+### Configurer EmailJS avec SMTP OVH (recommandé)
 
 1. Créer un compte gratuit sur [emailjs.com](https://www.emailjs.com)
 2. Ajouter un service email (Gmail ou SMTP)

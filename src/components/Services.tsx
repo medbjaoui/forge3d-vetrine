@@ -1,47 +1,69 @@
-import { Layers, Zap, PenTool, Package, Wrench, GraduationCap, ArrowRight } from 'lucide-react';
+import { Server, Shield, Cloud, Database, Package, Wrench, ArrowRight, Network, Lock, BarChart } from 'lucide-react';
 
 const SERVICES = [
   {
-    icon: Zap,
-    title: 'Prototypage Rapide',
-    description: 'De l\'idée au prototype physique en 24 à 48h. Réduisez vos cycles de développement et validez vos concepts avant production.',
-    color: 'from-orange-500/20 to-orange-600/5',
-    features: ['Délai express 24-48h', 'FDM, SLA, SLS', 'Révisions illimitées'],
-  },
-  {
-    icon: Layers,
-    title: 'Impression 3D Professionnelle',
-    description: 'Technologies de pointe FDM, SLA, SLS et MJF pour tous types de matériaux. Haute précision, excellents rendus de surface.',
+    icon: Server,
+    title: 'Administration Systèmes & Réseaux',
+    description: 'Gestion complète de votre infrastructure IT : Windows Server, Active Directory, DNS, DHCP, virtualisation VMware ESXi & Docker.',
     color: 'from-blue-500/20 to-blue-600/5',
-    features: ['Précision ±0.1mm', '15+ matériaux', 'Grande capacité'],
+    features: ['Windows Server & AD', 'VMware & Docker', 'Gestion DNS/DHCP'],
+    category: 'IT',
   },
   {
-    icon: PenTool,
-    title: 'Modélisation & Design 3D',
-    description: 'Conception CAO sur mesure par nos ingénieurs. Nous transformons vos plans, croquis ou idées en fichiers 3D prêts à imprimer.',
+    icon: Shield,
+    title: 'Cybersécurité & Protection',
+    description: 'Sécurisation réseau, firewall Fortigate, VPN, architecture Zero Trust, protection DNS Cloudflare et audit de sécurité complet.',
+    color: 'from-red-500/20 to-red-600/5',
+    features: ['Firewall Fortigate', 'VPN & Zero Trust', 'Audit de sécurité'],
+    category: 'IT',
+  },
+  {
+    icon: BarChart,
+    title: 'Monitoring & SIEM',
+    description: 'Surveillance infrastructure 24/7 avec Wazuh et ELK Stack. Détection d\'intrusions, alertes en temps réel et tableaux de bord.',
     color: 'from-purple-500/20 to-purple-600/5',
-    features: ['CAO sur mesure', 'SolidWorks / Fusion 360', 'Optimisation DFM'],
+    features: ['Wazuh SIEM', 'ELK Stack', 'Alertes temps réel'],
+    category: 'IT',
+  },
+  {
+    icon: Cloud,
+    title: 'Cloud & Migration Office 365',
+    description: 'Migration cloud, déploiement Office 365, sauvegarde Veeam, continuité d\'activité et optimisation infrastructure cloud.',
+    color: 'from-cyan-500/20 to-cyan-600/5',
+    features: ['Migration O365', 'Veeam Backup', 'Reprise d\'activité'],
+    category: 'IT',
+  },
+  {
+    icon: Network,
+    title: 'Infogérance & Support',
+    description: 'Support technique réactif, maintenance préventive, gestion proactive de votre parc informatique et assistance utilisateurs.',
+    color: 'from-green-500/20 to-green-600/5',
+    features: ['Support 24/7', 'Maintenance préventive', 'Gestion parc IT'],
+    category: 'IT',
+  },
+  {
+    icon: Database,
+    title: 'Optimisation Infrastructure',
+    description: 'Audit complet, optimisation performances, modernisation infrastructure, conseil stratégique et accompagnement transformation digitale.',
+    color: 'from-indigo-500/20 to-indigo-600/5',
+    features: ['Audit infrastructure', 'Optimisation perf', 'Conseil stratégique'],
+    category: 'IT',
   },
   {
     icon: Package,
-    title: 'Production en Série',
-    description: 'Fabrication en petite et moyenne série pour vos besoins industriels. Consistance qualité garantie de la première à la dernière pièce.',
-    color: 'from-green-500/20 to-green-600/5',
-    features: ['Petite & moyenne série', 'Contrôle qualité rigoureux', 'Délais compétitifs'],
+    title: 'E-commerce Impression 3D',
+    description: 'Boutique en ligne d\'objets 3D : figurines personnalisées, prototypes techniques, objets déco. Production à la demande B2B/B2C.',
+    color: 'from-orange-500/20 to-orange-600/5',
+    features: ['Figurines custom', 'Prototypes rapides', 'Livraison internationale'],
+    category: '3D',
   },
   {
     icon: Wrench,
-    title: 'Pièces Techniques',
-    description: 'Fabrication de pièces mécaniques de précision, pièces de remplacement et composants fonctionnels pour l\'industrie.',
-    color: 'from-red-500/20 to-red-600/5',
-    features: ['Pièces fonctionnelles', 'Matériaux techniques', 'Tolérances serrées'],
-  },
-  {
-    icon: GraduationCap,
-    title: 'Conseil & Accompagnement',
-    description: 'Expertise technique pour optimiser vos projets d\'impression 3D. Formation de vos équipes et accompagnement stratégique.',
+    title: 'Fabrication 3D Sur Mesure',
+    description: 'Modélisation CAO, impression 3D professionnelle (FDM/SLA), pièces techniques et décoratives, production petite/moyenne série.',
     color: 'from-yellow-500/20 to-yellow-600/5',
-    features: ['Audit technique', 'Formation équipes', 'Suivi de projet'],
+    features: ['Modélisation 3D', 'FDM & SLA', 'Pièces sur mesure'],
+    category: '3D',
   },
 ];
 
@@ -57,12 +79,12 @@ export default function Services() {
             <span className="w-6 h-px bg-forge-orange inline-block" />
           </p>
           <h2 id="services-title" className="section-title text-forge-text mb-4">
-            Des solutions complètes pour
-            <span className="text-gradient block">tous vos besoins 3D</span>
+            Double expertise pour
+            <span className="text-gradient block">vos besoins technologiques</span>
           </h2>
           <p className="section-subtitle mx-auto text-center">
-            De la conception à la production, nous accompagnons vos projets à chaque étape
-            avec expertise et réactivité.
+            Sous-traitance IT (infrastructure, cybersécurité, cloud) et fabrication 3D à la demande.
+            Un partenaire unique pour votre transformation digitale.
           </p>
         </div>
 

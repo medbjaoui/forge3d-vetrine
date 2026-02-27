@@ -5,17 +5,16 @@ const QUICK_LINKS = [
   { label: 'Services', href: '#services' },
   { label: 'Portfolio', href: '#portfolio' },
   { label: 'À propos', href: '#apropos' },
-  { label: 'Tarifs', href: '#pricing' },
   { label: 'Contact', href: '#contact' },
 ];
 
 const SERVICES_LINKS = [
-  'Prototypage rapide',
-  'Impression 3D professionnelle',
-  'Modélisation 3D / CAO',
-  'Production en série',
-  'Pièces techniques',
-  'Conseil & accompagnement',
+  'Administration Systèmes & Réseaux',
+  'Cybersécurité & Protection',
+  'Monitoring & SIEM',
+  'Cloud & Migration Office 365',
+  'E-commerce Impression 3D',
+  'Fabrication 3D Sur Mesure',
 ];
 
 const LEGAL_LINKS = [
@@ -64,14 +63,14 @@ export default function Footer() {
               />
             </a>
             <p className="text-white/45 text-sm leading-relaxed mb-6">
-              Solutions d'impression 3D professionnelles pour transformer vos idées
-              en produits réels. Prototypage, production et pièces sur mesure.
+              Société technologique tunisienne : sous-traitance IT (infrastructure,
+              cybersécurité, cloud) et fabrication 3D à la demande. Votre partenaire unique.
             </p>
 
             {/* Social */}
             <div className="flex items-center gap-3">
               <a
-                href="https://www.linkedin.com/company/forge3d"
+                href="https://www.linkedin.com/company/forge3d-tech"
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label="Forge3D sur LinkedIn"
@@ -191,7 +190,7 @@ export default function Footer() {
           <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
             <p className="text-white/30 text-xs text-center sm:text-left">
               © {currentYear} Forge3D. Tous droits réservés.
-              {' '}Conçu et développé avec passion en Algérie.
+              {' '}Conçu et développé avec passion en Tunisie.
             </p>
             <nav aria-label="Mentions légales">
               <ul className="flex flex-wrap items-center gap-4">

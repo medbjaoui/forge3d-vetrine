@@ -1,32 +1,102 @@
 ##############################################################################
-# docker-compose.yml – Forge3D Vitrine (www.forge3d.tech)
+# docker-compose.yml – Forge3D Platform (www.forge3d.tech)
+#
+# Services:
+#   - vitrine: Frontend React (Nginx)
+#   - backend: API Node.js + SMTP
+#   - postgres: PostgreSQL database
 #
 # Usage:
-#   docker compose up -d                        # Production (port 80)
-#   docker compose up --build                   # Rebuild & run
-#   docker compose down                         # Stop & remove containers
-#
-# With Traefik reverse proxy (recommended for SSL):
-#   See docker-compose.traefik.yml
+#   docker compose up -d --build                # Build & start all services
+#   docker compose logs -f backend              # View backend logs
+#   docker compose down                         # Stop all services
 ##############################################################################
 
-version: "3.9"
-
 services:
-  # ── Forge3D Site Vitrine ─────────────────────────────────────────────────
+  # ── PostgreSQL Database ───────────────────────────────────────────────────
+  postgres_vetrine:
+    image: postgres:16-alpine
+    container_name: forge3d-vetrine-postgres-db
+    restart: unless-stopped
+    env_file:
+      - .env
+    environment:
+      POSTGRES_DB: forge3d
+      POSTGRES_USER: forge3d
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-forge3d_password_CHANGE_ME}
+      TZ: Africa/Tunis
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./smtp-backend/init.sql:/docker-entrypoint-initdb.d/init.sql
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U forge3d"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - forge3d_internal
+
+  # ── Backend API (Node.js + SMTP) ───────────────────────────────────────────
+  backend:
+    build:
+      context: ./smtp-backend
+      dockerfile: Dockerfile
+    container_name: forge3d-vetrine-backend
+    restart: unless-stopped
+    depends_on:
+      postgres_vetrine:
+        condition: service_healthy
+    env_file:
+      - .env
+    environment:
+      PORT: 3001
+      NODE_ENV: production
+      DB_HOST: postgres_vetrine
+      DB_PORT: 5432
+      DB_NAME: forge3d
+      DB_USER: forge3d
+      DB_PASSWORD: ${DB_PASSWORD:-forge3d_password_CHANGE_ME}
+      SMTP_HOST: ${SMTP_HOST:-pro3.mail.ovh.net}
+      SMTP_PORT: ${SMTP_PORT:-587}
+      SMTP_USER: ${SMTP_USER:-contact@forge3d.tech}
+      SMTP_PASSWORD: ${SMTP_PASSWORD}
+      SMTP_FROM: ${SMTP_FROM:-contact@forge3d.tech}
+      SMTP_TO: ${SMTP_TO:-contact@forge3d.tech}
+      CORS_ORIGIN: "*"
+      TZ: Africa/Tunis
+    expose:
+      - "3001"
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://localhost:3001/health"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 15s
+    labels:
+      - "com.forge3d.service=backend"
+      - "com.forge3d.description=Forge3D Backend API"
+    networks:
+      - forge3d_internal
+      - cloudflarenet
+
+  # ── Forge3D Site Vitrine (Frontend) ────────────────────────────────────────
   vitrine:
     build:
       context: .
       dockerfile: Dockerfile
       target: production
-    container_name: forge3d-vitrine
+    container_name: forge3d-vetrine-vitrine
     restart: unless-stopped
-    ports:
-      - "${VITRINE_PORT:-80}:80"
+    depends_on:
+      - backend
+    env_file:
+      - .env
+    expose:
+      - "80"
     environment:
-      - TZ=Africa/Algiers
+      TZ: Africa/Tunis
     healthcheck:
-      test: ["CMD", "wget", "-qO-", "http://localhost/health"]
+      test: ["CMD", "wget", "-qO-", "http://localhost/"]
       interval: 30s
       timeout: 5s
       retries: 3
@@ -36,8 +106,23 @@ services:
       - "com.forge3d.description=Forge3D Site Vitrine"
     networks:
       - cloudflarenet
+      - forge3d_internal
+
+# ══════════════════════════════════════════════════════════════════════════════
+# NETWORKS
+# ══════════════════════════════════════════════════════════════════════════════
 
 networks:
   cloudflarenet:
     external: true
     name: cloudflarenet
+  forge3d_internal:
+    driver: bridge
+
+# ══════════════════════════════════════════════════════════════════════════════
+# VOLUMES
+# ══════════════════════════════════════════════════════════════════════════════
+
+volumes:
+  postgres_data:
+    driver: local

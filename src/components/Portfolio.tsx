@@ -1,69 +1,69 @@
-import { TrendingUp, Clock, DollarSign, ExternalLink } from 'lucide-react';
+import { TrendingUp, Clock, DollarSign, ExternalLink, Shield, Server } from 'lucide-react';
 
 const PROJECTS = [
   {
     id: 1,
-    title: 'Prototype de Valve Industrielle',
-    sector: 'Industrie Pétrolière & Gazière',
+    title: 'Migration Infrastructure Cloud',
+    sector: 'PME Internationale',
     description:
-      'Conception et fabrication d\'un prototype fonctionnel de valve haute pression pour valider le design avant la mise en production à grande échelle.',
+      'Migration complète d\'une infrastructure on-premise vers Office 365 et Azure. Déploiement AD Connect, migration de 150 utilisateurs, formation et support.',
     image: null,
-    gradient: 'from-orange-600 via-orange-800 to-slate-900',
+    gradient: 'from-blue-600 via-blue-800 to-slate-900',
     results: [
-      { icon: Clock, label: 'Délai réduit', value: 'de 3 sem. à 48h' },
-      { icon: DollarSign, label: 'Économie', value: '-60% sur le proto' },
-      { icon: TrendingUp, label: 'Cycles de design', value: '8 → 2 itérations' },
+      { icon: Clock, label: 'Migration', value: 'Zero downtime' },
+      { icon: DollarSign, label: 'Économie/an', value: '-35% coûts IT' },
+      { icon: TrendingUp, label: 'Productivité', value: '+40% mobilité' },
     ],
-    tags: ['SLA', 'Résine Haute Résistance', 'Prototypage'],
-    badge: 'Industrie',
+    tags: ['Office 365', 'Azure', 'Migration', 'AD Connect'],
+    badge: 'Cloud',
   },
   {
     id: 2,
-    title: 'Boîtiers Électroniques sur Mesure',
-    sector: 'Startup Technologique',
+    title: 'Sécurisation Infrastructure Réseau',
+    sector: 'Groupe Industriel',
     description:
-      'Production de 500 boîtiers électroniques IP65 en ABS pour une gamme de capteurs IoT. Intégration des connecteurs et inserts métalliques.',
+      'Déploiement architecture Zero Trust, firewall Fortigate, segmentation réseau, VPN site-to-site et monitoring SIEM Wazuh pour 3 sites distants.',
     image: null,
-    gradient: 'from-blue-700 via-blue-900 to-slate-900',
+    gradient: 'from-red-700 via-red-900 to-slate-900',
     results: [
-      { icon: Package2, label: 'Pièces produites', value: '500 unités' },
-      { icon: Clock, label: 'Temps de prod.', value: '2 semaines' },
-      { icon: TrendingUp, label: 'Conformité', value: 'IP65 validée' },
+      { icon: Shield, label: 'Sécurité', value: 'Zero Trust' },
+      { icon: TrendingUp, label: 'Incidents', value: '-95% attaques' },
+      { icon: Clock, label: 'Monitoring', value: '24/7 SIEM' },
     ],
-    tags: ['FDM', 'ABS', 'Série', 'Inserts'],
-    badge: 'Série',
+    tags: ['Fortigate', 'Wazuh', 'Zero Trust', 'VPN'],
+    badge: 'Cybersécurité',
   },
   {
     id: 3,
-    title: 'Pièces de Remplacement Industrielles',
-    sector: 'Industrie Manufacturière',
+    title: 'Virtualisation VMware ESXi',
+    sector: 'Startup Tech',
     description:
-      'Rétro-ingénierie et fabrication de pièces mécaniques de remplacement pour des équipements hors support constructeur, en Nylon renforcé fibres de carbone.',
-    image: null,
-    gradient: 'from-green-700 via-green-900 to-slate-900',
-    results: [
-      { icon: DollarSign, label: 'Économie vs OEM', value: '-40% de coût' },
-      { icon: Clock, label: 'Disponibilité', value: 'Sous 24h' },
-      { icon: TrendingUp, label: 'Durabilité', value: '+3× vs original' },
-    ],
-    tags: ['PA12-CF', 'Rétro-ingénierie', 'Mécanique'],
-    badge: 'Sur Mesure',
-  },
-  {
-    id: 4,
-    title: 'Maquette Architecturale',
-    sector: 'Cabinet d\'Architecture',
-    description:
-      'Réalisation d\'une maquette détaillée 1:50 d\'un complexe résidentiel pour présentation client. Précision millimétrique et finition professionnelle.',
+      'Mise en place infrastructure virtualisée VMware ESXi avec haute disponibilité, sauvegarde Veeam automatisée et monitoring centralisé.',
     image: null,
     gradient: 'from-purple-700 via-purple-900 to-slate-900',
     results: [
-      { icon: TrendingUp, label: 'Échelle', value: '1:50 précis' },
-      { icon: Clock, label: 'Réalisation', value: '72h chrono' },
-      { icon: DollarSign, label: 'Présentation', value: 'Contrat décroché' },
+      { icon: Server, label: 'Serveurs VM', value: '25 machines' },
+      { icon: DollarSign, label: 'ROI', value: 'Rentable en 8 mois' },
+      { icon: TrendingUp, label: 'Disponibilité', value: '99.9% uptime' },
     ],
-    tags: ['SLA', 'Résine Fine', 'Architecture'],
-    badge: 'Design',
+    tags: ['VMware ESXi', 'Veeam', 'HA', 'Monitoring'],
+    badge: 'Infrastructure',
+  },
+  {
+    id: 4,
+    title: 'Prototypes Techniques Impression 3D',
+    sector: 'Industrie Manufacturière',
+    description:
+      'Production de prototypes fonctionnels et pièces de remplacement industrielles en Nylon renforcé carbone. Livraison express 48h.',
+    image: null,
+    gradient: 'from-orange-700 via-orange-900 to-slate-900',
+    results: [
+      { icon: Clock, label: 'Délai', value: '48h express' },
+      { icon: DollarSign, label: 'Économie', value: '-60% vs OEM' },
+      { icon: TrendingUp, label: 'Précision', value: '±0.1mm' },
+    ],
+    tags: ['FDM', 'SLA', 'Prototypage', 'PA12-CF'],
+    badge: 'Fabrication 3D',
   },
 ];
 

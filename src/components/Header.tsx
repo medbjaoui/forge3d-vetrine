@@ -116,7 +116,7 @@ export default function Header() {
               Boutique
             </a>
             <a
-              href="https://www.linkedin.com/company/forge3d"
+              href="https://www.linkedin.com/company/forge3d-tech"
               target="_blank"
               rel="noopener noreferrer"
               className="flex items-center gap-2 bg-[#0A66C2] hover:bg-[#0959a9] text-white text-sm font-semibold px-4 py-2 rounded-lg transition-colors duration-200"
@@ -185,7 +185,7 @@ export default function Header() {
               Accéder à la boutique
             </a>
             <a
-              href="https://www.linkedin.com/company/forge3d"
+              href="https://www.linkedin.com/company/forge3d-tech"
               target="_blank"
               rel="noopener noreferrer"
               className="flex items-center gap-2 text-white/80 px-4 py-3 rounded-lg hover:bg-white/5 transition-colors"

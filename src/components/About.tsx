@@ -1,26 +1,26 @@
 import { useEffect, useRef, useState } from 'react';
-import { Target, Eye, Heart, Users, CheckCircle2 } from 'lucide-react';
+import { Target, Eye, Heart, Users, CheckCircle2, Shield } from 'lucide-react';
 
 const VALUES = [
   {
-    icon: Target,
-    title: 'Innovation',
-    description: 'Nous investissons continuellement dans les dernières technologies pour offrir des solutions à la pointe de la fabrication additive.',
+    icon: Shield,
+    title: 'Sécurité',
+    description: 'Protection maximale de vos infrastructures avec des solutions de cybersécurité avancées, monitoring 24/7 et architecture Zero Trust.',
   },
   {
     icon: CheckCircle2,
-    title: 'Précision',
-    description: 'Chaque pièce est fabriquée avec des tolérances rigoureuses et un contrôle qualité systématique à chaque étape de la production.',
+    title: 'Expertise',
+    description: 'Double compétence IT et fabrication 3D. Une équipe d\'ingénieurs certifiés qui maîtrise à la fois les systèmes et la production numérique.',
   },
   {
     icon: Heart,
-    title: 'Fiabilité',
-    description: 'Nos clients nous font confiance pour respecter les délais et les spécifications techniques, même pour les projets les plus exigeants.',
+    title: 'Réactivité',
+    description: 'Support technique rapide, maintenance proactive et accompagnement personnalisé. Nous intervenons avant que les problèmes n\'impactent votre activité.',
   },
   {
     icon: Users,
     title: 'Partenariat',
-    description: 'Nous ne sommes pas un simple fournisseur, mais un partenaire technique qui s\'implique dans la réussite de vos projets.',
+    description: 'Plus qu\'un prestataire, nous sommes votre partenaire technologique. Nous nous impliquons dans votre réussite à long terme.',
   },
 ];
 
@@ -83,8 +83,8 @@ export default function About() {
             <span className="w-6 h-px bg-forge-orange inline-block" />
           </p>
           <h2 id="apropos-title" className="section-title text-white mb-4">
-            L'expertise 3D au service
-            <span className="text-gradient block">de votre ambition</span>
+            Technologie tunisienne
+            <span className="text-gradient block">à double expertise</span>
           </h2>
         </div>
 
@@ -99,9 +99,9 @@ export default function About() {
                   <h3 className="text-xl font-display font-semibold text-white">Notre Mission</h3>
                 </div>
                 <p className="text-white/65 leading-relaxed">
-                  Rendre l'impression 3D professionnelle accessible à toutes les entreprises,
-                  quelle que soit leur taille. Nous croyons que la fabrication additive est
-                  un levier de compétitivité que chaque entreprise mérite de pouvoir exploiter.
+                  Accompagner les PME, startups et groupes internationaux dans la sécurisation,
+                  l'optimisation et la gestion de leurs infrastructures informatiques — tout en
+                  offrant une boutique e-commerce d'objets imprimés en 3D sur mesure.
                 </p>
               </div>
 
@@ -111,18 +111,19 @@ export default function About() {
                   <h3 className="text-xl font-display font-semibold text-white">Notre Vision</h3>
                 </div>
                 <p className="text-white/65 leading-relaxed">
-                  Devenir le partenaire de référence pour la fabrication additive et l'innovation
-                  industrielle. Nous visons à accompagner les entreprises dans leur transformation
-                  digitale grâce à des solutions de fabrication innovantes et agiles.
+                  Devenir le partenaire technologique de référence en Tunisie et en Afrique,
+                  en combinant excellence en infrastructure IT et innovation en fabrication numérique.
+                  Un pont entre la technologie d'entreprise et la fabrication 3D à la demande.
                 </p>
               </div>
 
               <div className="bg-forge-dark-800 rounded-2xl p-6 border border-white/5">
                 <p className="text-white/80 text-sm leading-relaxed italic">
-                  "Forge3D est née de la conviction que l'accès aux technologies d'impression 3D
-                  professionnelle ne doit pas être réservé aux grandes entreprises. Notre équipe
-                  d'ingénieurs passionnés met son expertise au service de vos projets les plus
-                  ambitieux."
+                  "Forge3D est une société technologique tunisienne à double expertise : sous-traitance
+                  IT et impression 3D à la demande. Nous accompagnons les entreprises dans la gestion
+                  de leurs infrastructures (sécurité, cloud, monitoring) tout en offrant des services
+                  de fabrication numérique (prototypes, figurines, pièces techniques). Un partenaire
+                  unique qui comprend à la fois la technologie d'entreprise et la fabrication 3D."
                 </p>
                 <div className="mt-4 flex items-center gap-3">
                   <div className="w-10 h-10 rounded-full bg-gradient-to-br from-forge-orange to-forge-orange-dark flex items-center justify-center text-white font-display font-bold text-sm">
