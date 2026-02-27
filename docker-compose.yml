@@ -1,0 +1,43 @@
+##############################################################################
+# docker-compose.yml – Forge3D Vitrine (www.forge3d.tech)
+#
+# Usage:
+#   docker compose up -d                        # Production (port 80)
+#   docker compose up --build                   # Rebuild & run
+#   docker compose down                         # Stop & remove containers
+#
+# With Traefik reverse proxy (recommended for SSL):
+#   See docker-compose.traefik.yml
+##############################################################################
+
+version: "3.9"
+
+services:
+  # ── Forge3D Site Vitrine ─────────────────────────────────────────────────
+  vitrine:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: production
+    container_name: forge3d-vitrine
+    restart: unless-stopped
+    ports:
+      - "${VITRINE_PORT:-80}:80"
+    environment:
+      - TZ=Africa/Algiers
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://localhost/health"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 10s
+    labels:
+      - "com.forge3d.service=vitrine"
+      - "com.forge3d.description=Forge3D Site Vitrine"
+    networks:
+      - cloudflarenet
+
+networks:
+  cloudflarenet:
+    external: true
+    name: cloudflarenet

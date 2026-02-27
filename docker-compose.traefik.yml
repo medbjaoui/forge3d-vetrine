@@ -1,0 +1,47 @@
+##############################################################################
+# docker-compose.traefik.yml – Traefik reverse proxy + SSL
+#
+# This file manages the Traefik proxy for both:
+#   - www.forge3d.tech     → vitrine (this project)
+#   - shop.forge3d.tech    → ForgeStore_prod (e-commerce app)
+#
+# Usage (first time):
+#   1. Create external network:   docker network create forge3d-network
+#   2. Create acme.json:          touch traefik/acme.json && chmod 600 traefik/acme.json
+#   3. Edit traefik/traefik.yml   (set your email for Let's Encrypt)
+#   4. Start Traefik:             docker compose -f docker-compose.traefik.yml up -d
+#   5. Start vitrine:             docker compose up -d
+#   6. Start shop (in ForgeStore_prod folder): docker compose up -d
+##############################################################################
+
+version: "3.9"
+
+services:
+  traefik:
+    image: traefik:v3.1
+    container_name: traefik
+    restart: unless-stopped
+    ports:
+      - "80:80"       # HTTP
+      - "443:443"     # HTTPS
+      - "8080:8080"   # Traefik dashboard (disable in production!)
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - ./traefik/traefik.yml:/traefik.yml:ro
+      - ./traefik/acme.json:/acme.json
+    environment:
+      - TZ=Africa/Algiers
+    labels:
+      - "traefik.enable=true"
+      # Dashboard (optional – remove in production or add auth)
+      - "traefik.http.routers.dashboard.rule=Host(`traefik.forge3d.tech`)"
+      - "traefik.http.routers.dashboard.service=api@internal"
+      - "traefik.http.routers.dashboard.entrypoints=websecure"
+      - "traefik.http.routers.dashboard.tls.certresolver=letsencrypt"
+    networks:
+      - forge3d-network
+
+networks:
+  forge3d-network:
+    name: forge3d-network
+    external: true
