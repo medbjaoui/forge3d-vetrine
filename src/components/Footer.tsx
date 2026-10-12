@@ -5,7 +5,7 @@ export default function Footer() {
     <footer className="border-t border-white/10 bg-forge-dark text-white">
       <div className="container-forge grid gap-10 px-4 py-14 sm:px-6 md:grid-cols-3 lg:px-8">
         <div>
-          <img src="/logo-forge3d.png" alt="FORGE3D" className="mb-5 h-10 w-auto" />
+          <img src="/logo-forge3d-transparent.png" alt="FORGE3D" className="mb-5 h-16 w-auto object-contain" />
           <p className="max-w-sm text-sm leading-6 text-white/55">3D printing, software development, business automation and AI research from Tunisia.</p>
         </div>
         <div>

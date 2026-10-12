@@ -23,7 +23,7 @@ export default function Header() {
     <header className={`fixed inset-x-0 top-0 z-50 border-b transition-all ${scrolled || open ? 'border-white/10 bg-forge-dark/95 backdrop-blur-xl' : 'border-transparent bg-forge-dark/70 backdrop-blur-md'}`}>
       <div className="container-forge flex h-[72px] items-center justify-between px-4 sm:px-6 lg:h-20 lg:px-8">
         <a href="/" className="flex items-center" aria-label="FORGE3D home">
-          <img src="/logo-forge3d.png" alt="FORGE3D" className="h-10 w-auto" />
+          <img src="/logo-forge3d-transparent.png" alt="FORGE3D" className="h-14 w-auto object-contain" />
         </a>
         <nav className="hidden items-center gap-1 md:flex" aria-label="Main navigation">
           {links.map((link) => (
