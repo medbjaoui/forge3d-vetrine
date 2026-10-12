@@ -2,9 +2,6 @@
 @tailwind components;
 @tailwind utilities;
 
-/* ── Google Fonts ─────────────────────────────── */
-@import url('https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap');
-
 /* ── CSS Variables ─────────────────────────────── */
 :root {
   --forge-orange: #f97316;
@@ -36,6 +33,10 @@ body {
   color: #1e293b;
   overflow-x: hidden;
 }
+
+a, button, input, select, textarea { outline-color: #f97316; outline-offset: 3px; }
+.skip-link { position: fixed; left: 1rem; top: -5rem; z-index: 100; border-radius: .5rem; background: #f97316; color: white; padding: .75rem 1rem; font-weight: 700; }
+.skip-link:focus { top: 1rem; }
 
 /* ── Typography ───────────────────────────────── */
 h1, h2, h3, h4, h5, h6 {
@@ -130,7 +131,18 @@ h1, h2, h3, h4, h5, h6 {
   .section-subtitle {
     @apply text-lg text-forge-text-muted max-w-2xl;
   }
+
+  .hero-shell { @apply relative overflow-hidden; }
+  .page-hero { @apply pt-36 pb-20 sm:pt-44 sm:pb-24; }
+  .page-title { @apply max-w-5xl text-5xl sm:text-6xl lg:text-7xl font-display font-bold leading-none; }
+  .page-lead { @apply mt-7 max-w-3xl text-lg sm:text-xl leading-8 text-white/65; }
+  .premium-card { @apply rounded-3xl border border-slate-200 bg-white p-7 transition-all duration-300 hover:-translate-y-1 hover:border-orange-200 hover:shadow-forge-card-hover; }
+  .icon-box { @apply inline-flex h-12 w-12 items-center justify-center rounded-2xl bg-forge-orange/10 text-forge-orange; }
 }
+
+.tech-core { display: flex; height: 9rem; width: 9rem; align-items: center; justify-content: center; border: 1px solid rgba(249,115,22,.45); border-radius: 2rem; color: #f97316; background: rgba(249,115,22,.08); box-shadow: 0 0 80px rgba(249,115,22,.18); transform: rotate(45deg); }
+.tech-core svg { transform: rotate(-45deg); }
+.tech-node { position: absolute; display: flex; height: 3.5rem; min-width: 3.5rem; align-items: center; justify-content: center; border: 1px solid rgba(255,255,255,.13); border-radius: 1rem; padding: 0 .8rem; background: rgba(19,22,31,.9); color: rgba(255,255,255,.75); font-family: var(--font-display); font-weight: 700; box-shadow: 0 12px 40px rgba(0,0,0,.3); }
 
 /* ── Animations ───────────────────────────────── */
 @keyframes fadeInUp {
@@ -208,4 +220,10 @@ h1, h2, h3, h4, h5, h6 {
 .star-filled {
   color: #f97316;
   fill: #f97316;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; }
+  .reveal { opacity: 1; transform: none; }
 }

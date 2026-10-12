@@ -22,7 +22,6 @@ const PORT = process.env.PORT || 3001;
 
 const { Pool } = pg;
 console.log('🔐 DB_PASSWORD from env:', process.env.DB_PASSWORD ? '✅ Set' : '❌ Not set');
-console.log('🔐 DB_PASSWORD value:', process.env.DB_PASSWORD);
 console.log('🔐 DB_HOST value:', process.env.DB_HOST || 'postgres');
 const poolConfig = {
   host: process.env.DB_HOST || 'postgres',
@@ -31,7 +30,6 @@ const poolConfig = {
   user: process.env.DB_USER || 'forge3d',
   password: process.env.DB_PASSWORD || 'forge3d_password',
 };
-console.log('🔐 Pool config (password masked):', { ...poolConfig, password: poolConfig.password ? `${poolConfig.password.substring(0, 5)}***` : 'NOT SET' });
 const pool = new Pool(poolConfig);
 
 // Test connexion DB
@@ -74,8 +72,18 @@ transporter.verify((error, success) => {
 app.set('trust proxy', true);
 
 app.use(helmet());
+const allowedOrigins = new Set(
+  (process.env.CORS_ORIGIN || 'https://forge3d.tech,https://www.forge3d.tech')
+    .split(',')
+    .map((origin) => origin.trim())
+    .filter(Boolean)
+);
+
 app.use(cors({
-  origin: process.env.CORS_ORIGIN || '*',
+  origin(origin, callback) {
+    if (!origin || allowedOrigins.has(origin)) return callback(null, true);
+    return callback(new Error('Origin not allowed'));
+  },
   credentials: true,
 }));
 app.use(express.json());
@@ -128,6 +136,9 @@ app.post(
 
     const userAgent = req.get('User-Agent');
 
+    let contactId;
+    let mailOptions;
+
     try {
       // 1. Enregistrer dans la base de données
       const result = await pool.query(
@@ -137,7 +148,7 @@ app.post(
         [name, company, email, phone, subject, message, ipAddress, userAgent]
       );
 
-      const contactId = result.rows[0].id;
+      contactId = result.rows[0].id;
 
       // 2. Préparer et envoyer l'email
       const emailBody = `
@@ -175,7 +186,7 @@ Ce message a été envoyé depuis le formulaire de contact de www.forge3d.tech
 🔗 Voir dans l'admin : http://admin.forge3d.tech/contacts/${contactId}
       `;
 
-      const mailOptions = {
+      mailOptions = {
         from: `"Forge3D Contact Form" <${process.env.SMTP_FROM || 'contact@forge3d.tech'}>`,
         to: process.env.SMTP_TO || 'contact@forge3d.tech',
         replyTo: email,
@@ -201,11 +212,11 @@ Ce message a été envoyé depuis le formulaire de contact de www.forge3d.tech
       console.error('Error processing contact:', error);
 
       // Logger l'échec d'envoi
-      if (result?.rows[0]?.id) {
+      if (contactId && mailOptions) {
         await pool.query(
           `INSERT INTO email_logs (contact_request_id, to_email, from_email, subject, status, error_message)
            VALUES ($1, $2, $3, $4, $5, $6)`,
-          [result.rows[0].id, mailOptions.to, email, mailOptions.subject, 'failed', error.message]
+          [contactId, mailOptions.to, email, mailOptions.subject, 'failed', error.message]
         );
       }
 

@@ -1,45 +1,38 @@
 import { useEffect } from 'react';
 import Header from './components/Header';
-import Hero from './components/Hero';
-import Services from './components/Services';
-import Portfolio from './components/Portfolio';
-import About from './components/About';
-import Testimonials from './components/Testimonials';
-import Contact from './components/Contact';
 import Footer from './components/Footer';
 import ScrollToTop from './components/ScrollToTop';
+import HomePage from './pages/HomePage';
+import AboutPage from './pages/AboutPage';
+import CompanyPage from './pages/CompanyPage';
+import ForgeAssistPage from './pages/ForgeAssistPage';
+
+const routes: Record<string, () => JSX.Element> = {
+  '/': HomePage,
+  '/about': AboutPage,
+  '/company': CompanyPage,
+  '/forgeassist': ForgeAssistPage,
+};
 
 export default function App() {
-  // Intersection Observer for scroll reveal animations
+  const path = window.location.pathname.replace(/\/$/, '') || '/';
+  const Page = routes[path] ?? HomePage;
+
   useEffect(() => {
+    window.scrollTo(0, 0);
     const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            entry.target.classList.add('visible');
-          }
-        });
-      },
-      { threshold: 0.12, rootMargin: '0px 0px -40px 0px' }
+      (entries) => entries.forEach((entry) => entry.isIntersecting && entry.target.classList.add('visible')),
+      { threshold: 0.08, rootMargin: '0px 0px -24px 0px' }
     );
-
-    const elements = document.querySelectorAll('.reveal');
-    elements.forEach((el) => observer.observe(el));
-
+    document.querySelectorAll('.reveal').forEach((element) => observer.observe(element));
     return () => observer.disconnect();
-  }, []);
+  }, [path]);
 
   return (
-    <div className="min-h-screen">
+    <div className="min-h-screen bg-white">
+      <a href="#main-content" className="skip-link">Skip to content</a>
       <Header />
-      <main>
-        <Hero />
-        <Services />
-        <Portfolio />
-        <About />
-        <Testimonials />
-        <Contact />
-      </main>
+      <main id="main-content"><Page /></main>
       <Footer />
       <ScrollToTop />
     </div>
