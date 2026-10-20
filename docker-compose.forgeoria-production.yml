@@ -2,7 +2,7 @@
 # Merge with docker-compose.yml; recreate vitrine only with --no-deps.
 services:
   vitrine:
-    image: forge3d-vitrine:forgeoria-reviewed
+    image: forge3d-vitrine:receipts-reviewed
     networks:
       - cloudflarenet
       - forge3d_internal

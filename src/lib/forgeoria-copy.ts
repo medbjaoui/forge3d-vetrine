@@ -147,7 +147,7 @@ const en: Copy = {
   form: {
     tag: 'Discovery',
     title: 'Tell us about your workflow.',
-    intro: 'Share a few details and FORGE3D will get back to you to discuss whether ForgeOria fits your needs. No automatic email is sent.',
+    intro: 'Share a few details and FORGE3D will get back to you to discuss whether ForgeOria fits your needs. You will receive an acknowledgement by email.',
     name: 'Full name',
     email: 'Work email',
     company: 'Company',
@@ -182,7 +182,7 @@ const en: Copy = {
     title: 'How your request is handled.',
     paragraphs: [
       'The discovery form collects your name, work email, company, company size, budget range, timeline and the workflows you are interested in. FORGE3D uses this information only to answer your ForgeOria discovery request; the service derives an internal follow-up priority from your answers (size, budget, timeline, needs).',
-      'Your request is stored by FORGE3D’s ForgeOria service. It is not sold or shared for advertising, and submitting the form does not trigger any automatic email or third-party integration. For anti-abuse rate limiting, the service keeps a salted hash of your IP address rather than the address itself.',
+      'Your request is stored by FORGE3D’s ForgeOria service. It is not sold or shared for advertising, and an acknowledgement is sent through our OVHcloud email service; no marketing subscription or n8n automation is triggered. For anti-abuse rate limiting, the service keeps a salted hash of your IP address rather than the address itself.',
       'This page does not store your answers in your browser. To access, correct or delete your request, write to contact@forge3d.tech.',
     ],
     versionLabel: 'Consent text version',
@@ -270,7 +270,7 @@ const fr: Copy = {
   form: {
     tag: 'Découverte',
     title: 'Parlez-nous de votre workflow.',
-    intro: 'Partagez quelques informations et FORGE3D reviendra vers vous pour voir si ForgeOria correspond à vos besoins. Aucun e-mail automatique n’est envoyé.',
+    intro: 'Partagez quelques informations et FORGE3D reviendra vers vous pour voir si ForgeOria correspond à vos besoins. Vous recevrez un accusé de réception par e-mail.',
     name: 'Nom complet',
     email: 'E-mail professionnel',
     company: 'Entreprise',
@@ -305,7 +305,7 @@ const fr: Copy = {
     title: 'Comment votre demande est traitée.',
     paragraphs: [
       'Le formulaire de découverte recueille votre nom, votre e-mail professionnel, votre entreprise, sa taille, une fourchette de budget, un délai et les workflows qui vous intéressent. FORGE3D utilise ces informations uniquement pour répondre à votre demande de découverte ForgeOria ; le service en déduit une priorité de suivi interne (taille, budget, délai, besoins).',
-      'Votre demande est conservée par le service ForgeOria de FORGE3D. Elle n’est ni vendue ni partagée à des fins publicitaires, et l’envoi du formulaire ne déclenche aucun e-mail automatique ni intégration tierce. Pour limiter les abus, le service conserve une empreinte salée de votre adresse IP plutôt que l’adresse elle-même.',
+      'Votre demande est conservée par le service ForgeOria de FORGE3D. Elle n’est ni vendue ni partagée à des fins publicitaires, et un accusé de réception est envoyé via notre messagerie OVHcloud ; aucune inscription commerciale ni automatisation n8n n’est déclenchée. Pour limiter les abus, le service conserve une empreinte salée de votre adresse IP plutôt que l’adresse elle-même.',
       'Cette page n’enregistre pas vos réponses dans votre navigateur. Pour consulter, corriger ou supprimer votre demande, écrivez à contact@forge3d.tech.',
     ],
     versionLabel: 'Version du texte de consentement',
