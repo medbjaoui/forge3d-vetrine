@@ -12,12 +12,14 @@ const routes = {
     description: 'A concise, verifiable overview of FORGE3D activities, technology projects, public contact information and development roadmap.',
     type: 'website',
   },
-  forgeassist: {
-    title: 'ForgeAssist — AI-Powered Commerce Automation',
-    description: 'ForgeAssist is an AI-powered commerce automation project for customer communication and order management. Currently in development by FORGE3D.',
+  forgeoria: {
+    title: 'ForgeOria — Automation that moves your business forward | FORGE3D',
+    description: 'ForgeOria by FORGE3D designs business automation workflows with human review: lead qualification, invoice processing and support triage. In development; demos are simulated.',
     type: 'product',
   },
 };
+
+// /forgeassist is intentionally absent: nginx answers it with a 301 to /forgeoria.
 
 const template = await readFile('dist/index.html', 'utf8');
 
@@ -34,15 +36,18 @@ for (const [route, meta] of Object.entries(routes)) {
     .replace(/<meta name="twitter:title" content="[^"]*"\s*\/>/, `<meta name="twitter:title" content="${meta.title}" />`)
     .replace(/<meta name="twitter:description" content="[^"]*"\s*\/>/, `<meta name="twitter:description" content="${meta.description}" />`);
 
-  if (route === 'forgeassist') {
+  if (route === 'forgeoria') {
     const softwareJsonLd = JSON.stringify({
       '@context': 'https://schema.org',
       '@type': 'SoftwareApplication',
-      name: 'ForgeAssist',
+      name: 'ForgeOria',
+      slogan: 'Automation that moves your business forward.',
       applicationCategory: 'BusinessApplication',
       operatingSystem: 'Web',
       url,
       description: meta.description,
+      inLanguage: ['fr', 'en'],
+      brand: { '@type': 'Brand', name: 'ForgeOria' },
       creator: { '@type': 'Organization', name: 'FORGE3D', url: 'https://forge3d.tech' },
       softwareHelp: 'Currently in development',
     });

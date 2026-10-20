@@ -1,16 +1,17 @@
 import { ArrowRight, Bot, Box, Braces, ExternalLink, Mail, ShoppingBag, Workflow } from 'lucide-react';
 import Seo from '../components/Seo';
+import HomeForgeOriaBlock from '../components/forgeoria/HomeForgeOriaBlock';
 
 const activities = [
   { icon: Box, title: '3D Printing', text: 'Custom 3D printing, product design and manufacturing for practical prototypes, parts and objects.', link: 'https://shop.forge3d.tech', label: 'Explore the 3D shop' },
   { icon: Braces, title: 'Software Development', text: 'SaaS platforms, business applications and automation designed around real operational needs.', link: '/company', label: 'View our technology work' },
-  { icon: Bot, title: 'Artificial Intelligence', text: 'AI agents, conversational automation and intelligent business workflows under active research and development.', link: '/forgeassist', label: 'Discover ForgeAssist' },
+  { icon: Bot, title: 'Automation & AI', text: 'Business automation workflows with human review, developed under the ForgeOria brand and currently in development.', link: '/forgeoria', label: 'Discover ForgeOria' },
 ];
 
 export default function HomePage() {
   return (
     <>
-      <Seo title="FORGE3D — 3D Printing, Software & AI Solutions" description="FORGE3D is a Tunisia-based technology company working across 3D printing, software development, business automation and AI solutions." path="/" />
+      <Seo title="FORGE3D — 3D Printing, Software & AI Solutions" description="FORGE3D is a Tunisia-based technology company working across 3D printing, software development and business automation with ForgeOria." path="/" />
       <section className="hero-shell bg-dark-grid pt-28 text-white lg:pt-36">
         <div className="forge-orb -left-32 top-16 h-96 w-96 opacity-50" aria-hidden="true" />
         <div className="container-forge relative z-10 grid items-center gap-12 px-4 py-16 sm:px-6 lg:grid-cols-[1.15fr_.85fr] lg:px-8 lg:py-24">
@@ -20,7 +21,7 @@ export default function HomePage() {
             <p className="mt-7 max-w-2xl text-lg leading-8 text-white/65">We design practical technologies that help businesses improve efficiency and accelerate digital transformation—while continuing to deliver custom 3D printing and manufacturing services.</p>
             <div className="mt-9 flex flex-col gap-3 sm:flex-row">
               <a href="https://shop.forge3d.tech" target="_blank" rel="noopener noreferrer" className="btn-primary justify-center"><ShoppingBag size={18} /> Explore 3D printing <ExternalLink size={14} /></a>
-              <a href="/forgeassist" className="btn-ghost justify-center border border-white/15">Discover ForgeAssist <ArrowRight size={17} /></a>
+              <a href="/forgeoria" className="btn-ghost justify-center border border-white/15">Discover ForgeOria <ArrowRight size={17} /></a>
             </div>
           </div>
           <div className="relative mx-auto aspect-square w-full max-w-md" aria-hidden="true">
@@ -68,12 +69,7 @@ export default function HomePage() {
         </div>
       </section>
 
-      <section className="section-padding bg-forge-dark text-white">
-        <div className="container-forge grid items-center gap-10 lg:grid-cols-[1fr_auto]">
-          <div className="reveal"><p className="section-tag">In development</p><h2 className="section-title">Meet ForgeAssist.</h2><p className="mt-5 max-w-2xl text-lg leading-8 text-white/60">An AI-powered commerce automation project focused on customer communication and order workflows. The project is currently in development; its page distinguishes the roadmap from available capabilities.</p></div>
-          <a href="/forgeassist" className="btn-primary reveal">Explore the project <ArrowRight size={17} /></a>
-        </div>
-      </section>
+      <HomeForgeOriaBlock />
 
       <section id="contact" className="section-padding bg-white">
         <div className="container-forge rounded-3xl border border-slate-200 bg-forge-gray p-8 sm:p-12">

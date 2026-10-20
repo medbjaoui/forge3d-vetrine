@@ -144,6 +144,11 @@ h1, h2, h3, h4, h5, h6 {
 .tech-core svg { transform: rotate(-45deg); }
 .tech-node { position: absolute; display: flex; height: 3.5rem; min-width: 3.5rem; align-items: center; justify-content: center; border: 1px solid rgba(255,255,255,.13); border-radius: 1rem; padding: 0 .8rem; background: rgba(19,22,31,.9); color: rgba(255,255,255,.75); font-family: var(--font-display); font-weight: 700; box-shadow: 0 12px 40px rgba(0,0,0,.3); }
 
+/* ── ForgeOria ────────────────────────────────── */
+.forgeoria-icon-btn { display: inline-flex; height: 2.25rem; width: 2.25rem; align-items: center; justify-content: center; border: 1px solid rgba(255,255,255,.12); border-radius: .75rem; color: rgba(255,255,255,.75); background: rgba(255,255,255,.03); transition: color .2s, border-color .2s, background-color .2s; }
+.forgeoria-icon-btn:hover { color: #fff; border-color: rgba(249,115,22,.5); background: rgba(249,115,22,.1); }
+.forgeoria-hp { position: absolute; left: -10000px; top: auto; width: 1px; height: 1px; overflow: hidden; }
+
 /* ── Animations ───────────────────────────────── */
 @keyframes fadeInUp {
   from {

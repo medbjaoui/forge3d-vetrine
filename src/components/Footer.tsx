@@ -1,4 +1,5 @@
 import { ExternalLink, Mail, MapPin, ShoppingBag } from 'lucide-react';
+import { ForgeOriaLogo } from './forgeoria/BrandMark';
 
 export default function Footer() {
   return (
@@ -7,12 +8,17 @@ export default function Footer() {
         <div>
           <img src="/logo-forge3d-transparent.png" alt="FORGE3D" className="mb-5 h-16 w-auto object-contain" />
           <p className="max-w-sm text-sm leading-6 text-white/55">3D printing, software development, business automation and AI research from Tunisia.</p>
+          <a href="/forgeoria" className="mt-6 inline-flex flex-col gap-2 rounded-2xl border border-white/10 bg-white/[.03] p-4 transition-colors hover:border-forge-orange/40" aria-label="ForgeOria — Automation that moves your business forward">
+            <ForgeOriaLogo className="h-9 w-auto" fallbackClassName="text-2xl" />
+            <span className="text-xs text-white/50">Automation that moves your business forward.</span>
+          </a>
         </div>
         <div>
           <h2 className="mb-4 text-sm font-bold uppercase tracking-widest text-white/90">Explore</h2>
           <div className="grid grid-cols-2 gap-3 text-sm text-white/55">
             <a href="/" className="hover:text-forge-orange">Home</a><a href="/about" className="hover:text-forge-orange">About</a>
-            <a href="/company" className="hover:text-forge-orange">Company</a><a href="/forgeassist" className="hover:text-forge-orange">ForgeAssist</a>
+            <a href="/company" className="hover:text-forge-orange">Company</a><a href="/forgeoria" className="hover:text-forge-orange">ForgeOria</a>
+            <a href="/forgeoria#discovery" className="hover:text-forge-orange">Automation discovery</a><a href="/forgeoria#privacy" className="hover:text-forge-orange">ForgeOria privacy</a>
           </div>
         </div>
         <div>

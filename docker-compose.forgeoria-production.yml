@@ -1,0 +1,13 @@
+# Candidate production override. Apply ONLY after publication approval.
+# Merge with docker-compose.yml; recreate vitrine only with --no-deps.
+services:
+  vitrine:
+    image: forge3d-vitrine:forgeoria-reviewed
+    networks:
+      - cloudflarenet
+      - forge3d_internal
+      - forgeoria_app
+networks:
+  forgeoria_app:
+    external: true
+    name: agency-autopilot-staging_app

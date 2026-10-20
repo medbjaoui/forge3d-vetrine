@@ -1,0 +1,33 @@
+name: forgeoria-vitrine-staging
+services:
+  vitrine:
+    image: forgeoria-vitrine-staging/web:local
+    build:
+      context: .
+      dockerfile: Dockerfile.forgeoria-staging
+    ports:
+      - "127.0.0.1:3282:8080"
+    networks: [edge, app]
+    restart: unless-stopped
+    read_only: true
+    cap_drop: [ALL]
+    security_opt: [no-new-privileges:true]
+    tmpfs: [/tmp:size=32m]
+    pids_limit: 100
+    deploy:
+      resources:
+        limits: { cpus: "0.5", memory: 128M, pids: 100 }
+    logging:
+      driver: json-file
+      options: { max-size: "10m", max-file: "3" }
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://127.0.0.1:8080/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+networks:
+  edge:
+    driver: bridge
+  app:
+    external: true
+    name: agency-autopilot-staging_app

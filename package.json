@@ -7,7 +7,8 @@
     "dev": "vite",
     "build": "tsc && vite build",
     "postbuild": "node scripts/generate-route-shells.mjs",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "verify:forgeoria": "node scripts/verify-forgeoria.mjs"
   },
   "dependencies": {
     "react": "^18.3.1",
