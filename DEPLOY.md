@@ -1,3 +1,7 @@
+## Version ForgeOria publiée
+
+La version actuelle utilise `docker-compose.yml` **et** `docker-compose.forgeoria-production.yml`. Pour les commandes exactes, les vérifications et le retour arrière, voir [docs/PUBLICATION.md](docs/PUBLICATION.md). Le reste de ce document décrit les procédures antérieures.
+
 # Forge3D Vitrine – Guide de déploiement
 
 ## Architecture cible
