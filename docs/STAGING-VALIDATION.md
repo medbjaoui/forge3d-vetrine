@@ -41,3 +41,7 @@ Avant de recueillir de vrais prospects : valider sauvegarde hors serveur, protec
 
 ## Retour arrière
 Conserver commit et image publics antérieurs. Revenir à cette image et retirer l’override réseau du seul service vitrine. La refonte ne nécessite aucun changement de schéma ni restauration de base. Ne pas arrêter les projets tiers.
+
+## Image candidate de production prête
+
+Image `forge3d-vitrine:forgeoria-reviewed`, identifiant `sha256:6082f9770b48ffdd63819b141b9cd271a5756233829d826c018244ce78d10421`. Construite avec Node 22, npm ci et Nginx stable. Testée sur un bridge de test et le réseau app privé, avec publication temporaire 127.0.0.1:3283 : page produit 200, redirection 301, formulaire invalide 400 via le véritable alias API privé, administration 404. Conteneur temporaire supprimé après test. Aucune bascule publique effectuée.
