@@ -7,7 +7,7 @@ WORKDIR /app
 COPY package*.json ./
 
 # Install dependencies
-RUN npm install --prefer-offline
+RUN npm ci --no-audit --no-fund
 
 # Copy all source files
 COPY . .
@@ -16,7 +16,7 @@ COPY . .
 RUN npm run build
 
 # ── Stage 2: Serve ───────────────────────────────────────────────────────────
-FROM nginx:1.27-alpine AS production
+FROM nginx:stable-alpine AS production
 
 # Remove default nginx config
 RUN rm /etc/nginx/conf.d/default.conf
