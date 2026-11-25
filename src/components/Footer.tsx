@@ -18,6 +18,7 @@ export default function Footer() {
           <div className="grid grid-cols-2 gap-3 text-sm text-white/55">
             <a href="/" className="hover:text-forge-orange">Home</a><a href="/about" className="hover:text-forge-orange">About</a>
             <a href="/company" className="hover:text-forge-orange">Company</a><a href="/forgeoria" className="hover:text-forge-orange">ForgeOria</a>
+            <a href="/vigiparc" className="hover:text-forge-orange">VigiParc</a>
             <a href="/forgeoria#discovery" className="hover:text-forge-orange">Automation discovery</a><a href="/forgeoria#privacy" className="hover:text-forge-orange">ForgeOria privacy</a>
           </div>
         </div>

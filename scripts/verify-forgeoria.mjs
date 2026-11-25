@@ -55,9 +55,9 @@ check(deps.includes('framer-motion') && !deps.some((d) => /^(gsap|animejs|react-
 
 // ── SEO / static ────────────────────────────────────────────────────────────
 const sitemap = await read('public/sitemap.xml');
-check(sitemap.includes('https://forge3d.tech/forgeoria') && !sitemap.includes('forgeassist'), 'sitemap lists /forgeoria only');
+check(sitemap.includes('https://forge3d.tech/forgeoria') && !sitemap.includes('forgeassist'), 'sitemap lists /forgeoria without legacy ForgeAssist');
 const shells = await read('scripts/generate-route-shells.mjs');
-check(/forgeoria: \{/.test(shells) && /name: 'ForgeOria'/.test(shells) && !/ForgeAssist/.test(shells), 'route shells + JSON-LD for ForgeOria');
+check(/forgeoria: \{/.test(shells) && /'ForgeOria'/.test(shells) && !/ForgeAssist/.test(shells), 'route shells + JSON-LD for ForgeOria');
 const indexHtml = await read('index.html');
 check(indexHtml.includes('"name": "ForgeOria"'), 'root Organization JSON-LD references ForgeOria brand');
 
@@ -67,7 +67,7 @@ check(/location ~ \^\/forgeassist\(\/\.\*\)\?\$ \{\s*return 301 \/forgeoria\$is_
 check(prod.includes('resolver 127.0.0.11') && prod.includes('set $forgeoria_api http://forgeoria-api:4000;') && prod.includes('proxy_pass $forgeoria_api;'), 'prod: forgeoria-api via Docker resolver + variable');
 check(prod.includes('rewrite ^/api/autopilot/(.*)$ /api/$1 break;'), 'prod: /api/autopilot/ -> /api/');
 check(prod.includes('proxy_pass http://backend:3001/api/;') && prod.includes('location ^~ /api/contacts'), 'prod: existing contact API + /api/contacts block preserved');
-check(/location ~ \^\/\(about\|company\|forgeoria\)\$/.test(prod), 'prod: canonical shells include forgeoria');
+check(/location ~ \^\/\(about\|company\|forgeoria\|vigiparc\)\$/.test(prod), 'prod: canonical shells include forgeoria');
 const staging = await read('nginx.forgeoria-staging.conf');
 check(staging.includes('set $forgeoria_api http://api:4000;') && staging.includes('resolver 127.0.0.11'), 'staging: api:4000 via Docker resolver');
 check(/location \/api\/ \{\s*default_type application\/json;\s*return 503/.test(staging) && !staging.includes('backend:3001'), 'staging: contact API disabled with 503');

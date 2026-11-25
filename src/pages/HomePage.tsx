@@ -1,4 +1,4 @@
-import { ArrowRight, Bot, Box, Braces, ExternalLink, Mail, ShoppingBag, Workflow } from 'lucide-react';
+import { ArrowRight, Bot, Box, Braces, ExternalLink, Mail, ShieldCheck, ShoppingBag, Workflow } from 'lucide-react';
 import Seo from '../components/Seo';
 import HomeForgeOriaBlock from '../components/forgeoria/HomeForgeOriaBlock';
 
@@ -6,6 +6,7 @@ const activities = [
   { icon: Box, title: '3D Printing', text: 'Custom 3D printing, product design and manufacturing for practical prototypes, parts and objects.', link: 'https://shop.forge3d.tech', label: 'Explore the 3D shop' },
   { icon: Braces, title: 'Software Development', text: 'SaaS platforms, business applications and automation designed around real operational needs.', link: '/company', label: 'View our technology work' },
   { icon: Bot, title: 'Automation & AI', text: 'Business automation workflows with human review, developed under the ForgeOria brand and currently in development.', link: '/forgeoria', label: 'Discover ForgeOria' },
+  { icon: ShieldCheck, title: 'IT Management & Compliance', text: 'VigiParc brings asset management, security operations and ISO 27001 evidence together on infrastructure controlled by the client.', link: '/vigiparc', label: 'Découvrir VigiParc' },
 ];
 
 export default function HomePage() {
@@ -40,7 +41,7 @@ export default function HomePage() {
             <h2 id="technology-title" className="section-title text-forge-text">Three capabilities.<br /><span className="text-gradient">One practical mindset.</span></h2>
             <p className="section-subtitle mt-5">FORGE3D connects digital product development with physical production. Each activity is presented according to its current, verifiable stage.</p>
           </div>
-          <div className="mt-12 grid gap-6 lg:grid-cols-3">
+          <div className="mt-12 grid gap-6 md:grid-cols-2 xl:grid-cols-4">
             {activities.map(({ icon: Icon, title, text, link, label }, index) => (
               <article key={title} className={`reveal reveal-delay-${index + 1} premium-card group`}>
                 <div className="mb-8 flex items-center justify-between"><span className="icon-box"><Icon /></span><span className="text-xs font-bold tracking-[.18em] text-slate-300">0{index + 1}</span></div>

@@ -1,0 +1,3 @@
+Police Inter (Rasmus Andersson) — SIL Open Font License 1.1 (https://openfontlicense.org).
+Fichier : sous-ensemble latin, axe de graisse 400–700, distribué par Google Fonts. Embarqué localement
+car la politique de sécurité (CSP) de Forge Console interdit les ressources externes.

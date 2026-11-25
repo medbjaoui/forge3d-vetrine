@@ -17,6 +17,21 @@ const routes = {
     description: 'ForgeOria by FORGE3D designs business automation workflows with human review: lead qualification, invoice processing and support triage. In development; demos are simulated.',
     type: 'product',
   },
+  vigiparc: {
+    title: 'VigiParc — Gestion de parc, sécurité et conformité | FORGE3D',
+    description: 'VigiParc centralise la gestion de parc, la sécurité et le suivi ISO 27001 pour les PME, avec des données conservées chez le client.',
+    type: 'product',
+  },
+  'vigiparc/fonctionnalites': { title: 'Fonctionnalités | VigiParc — FORGE3D', description: 'Parc, sécurité, support, identités, conformité et services employés réunis dans VigiParc.', type: 'product' },
+  'vigiparc/iso-27001': { title: 'ISO 27001 | VigiParc — FORGE3D', description: 'VigiParc outille les 93 mesures ISO 27001:2022 et 33 collecteurs de preuves automatiques.', type: 'product' },
+  'vigiparc/bornes': { title: 'Bornes Linux | VigiParc — FORGE3D', description: 'Bornes Linux administrées, sessions encadrées et remise à zéro automatique.', type: 'product' },
+  'vigiparc/securite-confidentialite': { title: 'Sécurité et confidentialité | VigiParc — FORGE3D', description: 'Données sur site, flux sortants uniquement et télémétrie facultative sans donnée personnelle.', type: 'product' },
+  'vigiparc/offres': { title: 'Offres | VigiParc — FORGE3D', description: 'Offres Essentiel et Pro de VigiParc, proposées sur devis.', type: 'product' },
+  'vigiparc/technologie': { title: 'Technologie | VigiParc — FORGE3D', description: 'Architecture Docker sur Debian et composants logiciels libres de VigiParc.', type: 'product' },
+  'vigiparc/a-propos': { title: 'À propos | VigiParc — FORGE3D', description: 'VigiParc est développé et accompagné en Tunisie par Forge 3D.', type: 'product' },
+  'vigiparc/contact': { title: 'Démonstration | VigiParc — FORGE3D', description: 'Demandez une démonstration VigiParc adaptée à votre parc.', type: 'product' },
+  'vigiparc/mentions-legales': { title: 'Mentions légales | VigiParc — FORGE3D', description: 'Mentions légales du site VigiParc édité par Forge 3D.', type: 'product' },
+  'vigiparc/confidentialite': { title: 'Confidentialité | VigiParc — FORGE3D', description: 'Traitement des demandes de démonstration et droits des visiteurs du site VigiParc.', type: 'product' },
 };
 
 // /forgeassist is intentionally absent: nginx answers it with a 301 to /forgeoria.
@@ -36,20 +51,20 @@ for (const [route, meta] of Object.entries(routes)) {
     .replace(/<meta name="twitter:title" content="[^"]*"\s*\/>/, `<meta name="twitter:title" content="${meta.title}" />`)
     .replace(/<meta name="twitter:description" content="[^"]*"\s*\/>/, `<meta name="twitter:description" content="${meta.description}" />`);
 
-  if (route === 'forgeoria') {
+  if (route === 'forgeoria' || route.startsWith('vigiparc')) {
     const softwareJsonLd = JSON.stringify({
       '@context': 'https://schema.org',
       '@type': 'SoftwareApplication',
-      name: 'ForgeOria',
-      slogan: 'Automation that moves your business forward.',
+      name: route.startsWith('vigiparc') ? 'VigiParc' : 'ForgeOria',
+      slogan: route.startsWith('vigiparc') ? 'Votre parc, votre sécurité et vos preuves au même endroit.' : 'Automation that moves your business forward.',
       applicationCategory: 'BusinessApplication',
       operatingSystem: 'Web',
       url,
       description: meta.description,
-      inLanguage: ['fr', 'en'],
-      brand: { '@type': 'Brand', name: 'ForgeOria' },
+      inLanguage: route.startsWith('vigiparc') ? ['fr'] : ['fr', 'en'],
+      brand: { '@type': 'Brand', name: route.startsWith('vigiparc') ? 'VigiParc' : 'ForgeOria' },
       creator: { '@type': 'Organization', name: 'FORGE3D', url: 'https://forge3d.tech' },
-      softwareHelp: 'Currently in development',
+      softwareHelp: route === 'vigiparc' ? 'Démonstration sur demande' : 'Currently in development',
     });
     html = html.replace('</head>', `    <script type="application/ld+json">${softwareJsonLd}</script>\n  </head>`);
   }

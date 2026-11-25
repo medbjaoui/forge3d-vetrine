@@ -6,6 +6,7 @@ const links = [
   { label: 'About', href: '/about' },
   { label: 'Company', href: '/company' },
   { label: 'ForgeOria', href: '/forgeoria' },
+  { label: 'VigiParc', href: '/vigiparc' },
 ];
 
 export default function Header() {

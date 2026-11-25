@@ -2,6 +2,14 @@
 @tailwind components;
 @tailwind utilities;
 
+@font-face {
+  font-family: 'Inter';
+  src: url('/fonts/Inter-latin-var.woff2') format('woff2');
+  font-weight: 100 900;
+  font-style: normal;
+  font-display: swap;
+}
+
 /* ── CSS Variables ─────────────────────────────── */
 :root {
   --forge-orange: #f97316;
@@ -9,7 +17,7 @@
   --forge-dark: #0d0f16;
   --forge-dark-800: #13161f;
   --forge-dark-700: #1a1f2e;
-  --font-display: 'Rajdhani', system-ui, sans-serif;
+  --font-display: 'Inter', system-ui, sans-serif;
   --font-sans: 'Inter', system-ui, sans-serif;
   scroll-behavior: smooth;
 }

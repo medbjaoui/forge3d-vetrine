@@ -6,6 +6,9 @@ import HomePage from './pages/HomePage';
 import AboutPage from './pages/AboutPage';
 import CompanyPage from './pages/CompanyPage';
 import ForgeOriaPage from './pages/ForgeOriaPage';
+import VigiParcPage from './pages/VigiParcPage';
+import VigiParcInfoPage from './pages/VigiParcInfoPage';
+import NotFoundPage from './pages/NotFoundPage';
 import { FORGEORIA_PATH, LEGACY_FORGEASSIST_PATH } from './lib/forgeoria';
 
 const routes: Record<string, () => JSX.Element> = {
@@ -13,6 +16,17 @@ const routes: Record<string, () => JSX.Element> = {
   '/about': AboutPage,
   '/company': CompanyPage,
   [FORGEORIA_PATH]: ForgeOriaPage,
+  '/vigiparc': VigiParcPage,
+  '/vigiparc/fonctionnalites': () => <VigiParcInfoPage page="fonctionnalites" />,
+  '/vigiparc/iso-27001': () => <VigiParcInfoPage page="iso-27001" />,
+  '/vigiparc/bornes': () => <VigiParcInfoPage page="bornes" />,
+  '/vigiparc/securite-confidentialite': () => <VigiParcInfoPage page="securite-confidentialite" />,
+  '/vigiparc/offres': () => <VigiParcInfoPage page="offres" />,
+  '/vigiparc/technologie': () => <VigiParcInfoPage page="technologie" />,
+  '/vigiparc/a-propos': () => <VigiParcInfoPage page="a-propos" />,
+  '/vigiparc/contact': () => <VigiParcInfoPage page="contact" />,
+  '/vigiparc/mentions-legales': () => <VigiParcInfoPage page="mentions-legales" />,
+  '/vigiparc/confidentialite': () => <VigiParcInfoPage page="confidentialite" />,
 };
 
 // Production answers /forgeassist with an nginx 301; this covers dev/preview servers.
@@ -21,7 +35,7 @@ const redirects: Record<string, string> = { [LEGACY_FORGEASSIST_PATH]: FORGEORIA
 export default function App() {
   const path = window.location.pathname.replace(/\/$/, '') || '/';
   const redirectTo = redirects[path];
-  const Page = routes[path] ?? HomePage;
+  const Page = routes[path] ?? NotFoundPage;
 
   useEffect(() => {
     if (redirectTo) window.location.replace(`${redirectTo}${window.location.search}${window.location.hash}`);

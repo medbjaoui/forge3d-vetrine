@@ -18,6 +18,12 @@ services:
     image: postgres:16-alpine
     container_name: forge3d-vetrine-postgres-db
     restart: unless-stopped
+    mem_limit: 512m
+    logging:
+      driver: json-file
+      options:
+        max-size: 10m
+        max-file: "3"
     env_file:
       - .env
     environment:
@@ -43,6 +49,12 @@ services:
       dockerfile: Dockerfile
     container_name: forge3d-vetrine-backend
     restart: unless-stopped
+    mem_limit: 256m
+    logging:
+      driver: json-file
+      options:
+        max-size: 10m
+        max-file: "3"
     depends_on:
       postgres_vetrine:
         condition: service_healthy
@@ -87,6 +99,12 @@ services:
       target: production
     container_name: forge3d-vetrine-vitrine
     restart: unless-stopped
+    mem_limit: 128m
+    logging:
+      driver: json-file
+      options:
+        max-size: 10m
+        max-file: "3"
     depends_on:
       - backend
     env_file:
