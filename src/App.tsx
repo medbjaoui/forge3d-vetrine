@@ -1,17 +1,19 @@
-import { useEffect } from 'react';
+import { lazy, Suspense, useEffect } from 'react';
+import type { ComponentType } from 'react';
 import Header from './components/Header';
 import Footer from './components/Footer';
 import ScrollToTop from './components/ScrollToTop';
-import HomePage from './pages/HomePage';
-import AboutPage from './pages/AboutPage';
-import CompanyPage from './pages/CompanyPage';
-import ForgeOriaPage from './pages/ForgeOriaPage';
 import VigiParcPage from './pages/VigiParcPage';
 import VigiParcInfoPage from './pages/VigiParcInfoPage';
 import NotFoundPage from './pages/NotFoundPage';
 import { FORGEORIA_PATH, LEGACY_FORGEASSIST_PATH } from './lib/forgeoria';
 
-const routes: Record<string, () => JSX.Element> = {
+const HomePage = lazy(() => import('./pages/HomePage'));
+const AboutPage = lazy(() => import('./pages/AboutPage'));
+const CompanyPage = lazy(() => import('./pages/CompanyPage'));
+const ForgeOriaPage = lazy(() => import('./pages/ForgeOriaPage'));
+
+const routes: Record<string, ComponentType> = {
   '/': HomePage,
   '/about': AboutPage,
   '/company': CompanyPage,
@@ -32,8 +34,11 @@ const routes: Record<string, () => JSX.Element> = {
 // Production answers /forgeassist with an nginx 301; this covers dev/preview servers.
 const redirects: Record<string, string> = { [LEGACY_FORGEASSIST_PATH]: FORGEORIA_PATH };
 
-export default function App() {
-  const path = window.location.pathname.replace(/\/$/, '') || '/';
+type AppProps = { initialPath?: string };
+
+export default function App({ initialPath }: AppProps = {}) {
+  const browserPath = typeof window === 'undefined' ? '/' : window.location.pathname;
+  const path = initialPath ?? (browserPath.replace(/\/$/, '') || '/');
   const redirectTo = redirects[path];
   const Page = routes[path] ?? NotFoundPage;
 
@@ -61,8 +66,8 @@ export default function App() {
   return (
     <div className="min-h-screen bg-white">
       <a href="#main-content" className="skip-link">Skip to content</a>
-      <Header />
-      <main id="main-content"><Page /></main>
+      <Header currentPath={path} />
+      <main id="main-content"><Suspense fallback={null}><Page /></Suspense></main>
       <Footer />
       <ScrollToTop />
     </div>

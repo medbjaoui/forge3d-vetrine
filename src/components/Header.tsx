@@ -9,10 +9,12 @@ const links = [
   { label: 'VigiParc', href: '/vigiparc' },
 ];
 
-export default function Header() {
+type HeaderProps = { currentPath?: string };
+
+export default function Header({ currentPath = '/' }: HeaderProps) {
   const [open, setOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
-  const path = window.location.pathname.replace(/\/$/, '') || '/';
+  const path = currentPath.replace(/\/$/, '') || '/';
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 16);
@@ -24,7 +26,7 @@ export default function Header() {
     <header className={`fixed inset-x-0 top-0 z-50 border-b transition-all ${scrolled || open ? 'border-white/10 bg-forge-dark/95 backdrop-blur-xl' : 'border-transparent bg-forge-dark/70 backdrop-blur-md'}`}>
       <div className="container-forge flex h-[72px] items-center justify-between px-4 sm:px-6 lg:h-20 lg:px-8">
         <a href="/" className="flex items-center" aria-label="FORGE3D home">
-          <img src="/logo-forge3d-transparent.png" alt="FORGE3D" className="h-14 w-auto object-contain" />
+          <img src="/logo-forge3d-compact.webp" width="55" height="56" alt="FORGE3D" className="h-14 w-auto object-contain" />
         </a>
         <nav className="hidden items-center gap-1 md:flex" aria-label="Main navigation">
           {links.map((link) => (

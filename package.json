@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",
-    "postbuild": "node scripts/generate-route-shells.mjs",
+    "postbuild": "vite build --ssr src/entry-server.tsx --outDir .ssr --emptyOutDir && node scripts/generate-route-shells.mjs",
     "preview": "vite preview",
     "verify:forgeoria": "node scripts/verify-forgeoria.mjs",
     "verify:vigiparc": "node scripts/verify-vigiparc.mjs"

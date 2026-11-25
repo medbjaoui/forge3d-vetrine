@@ -1,4 +1,4 @@
-import { mkdir, readFile, writeFile } from 'node:fs/promises';
+import { mkdir, readFile, rm, writeFile } from 'node:fs/promises';
 import { join } from 'node:path';
 
 const routes = {
@@ -37,6 +37,7 @@ const routes = {
 // /forgeassist is intentionally absent: nginx answers it with a 301 to /forgeoria.
 
 const template = await readFile('dist/index.html', 'utf8');
+const { render } = await import('../.ssr/entry-server.js');
 
 for (const [route, meta] of Object.entries(routes)) {
   const url = `https://forge3d.tech/${route}`;
@@ -50,6 +51,10 @@ for (const [route, meta] of Object.entries(routes)) {
     .replace(/<meta property="og:description" content="[^"]*"\s*\/>/, `<meta property="og:description" content="${meta.description}" />`)
     .replace(/<meta name="twitter:title" content="[^"]*"\s*\/>/, `<meta name="twitter:title" content="${meta.title}" />`)
     .replace(/<meta name="twitter:description" content="[^"]*"\s*\/>/, `<meta name="twitter:description" content="${meta.description}" />`);
+
+  if (route.startsWith('vigiparc')) {
+    html = html.replace('<div id="root"></div>', `<div id="root">${render(`/${route}`)}</div>`);
+  }
 
   if (route === 'forgeoria' || route.startsWith('vigiparc')) {
     const softwareJsonLd = JSON.stringify({
@@ -73,5 +78,7 @@ for (const [route, meta] of Object.entries(routes)) {
   await mkdir(directory, { recursive: true });
   await writeFile(join(directory, 'index.html'), html);
 }
+
+await rm('.ssr', { recursive: true, force: true });
 
 console.log(`Generated ${Object.keys(routes).length} route-specific HTML shells.`);

@@ -10,6 +10,15 @@
   font-display: swap;
 }
 
+@font-face {
+  font-family: 'Inter Fallback';
+  src: local('Arial');
+  ascent-override: 90.2%;
+  descent-override: 22.48%;
+  line-gap-override: 0%;
+  size-adjust: 107.4%;
+}
+
 /* ── CSS Variables ─────────────────────────────── */
 :root {
   --forge-orange: #f97316;
@@ -17,8 +26,8 @@
   --forge-dark: #0d0f16;
   --forge-dark-800: #13161f;
   --forge-dark-700: #1a1f2e;
-  --font-display: 'Inter', system-ui, sans-serif;
-  --font-sans: 'Inter', system-ui, sans-serif;
+  --font-display: 'Inter', 'Inter Fallback', system-ui, sans-serif;
+  --font-sans: 'Inter', 'Inter Fallback', system-ui, sans-serif;
   scroll-behavior: smooth;
 }
 

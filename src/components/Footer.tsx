@@ -6,7 +6,7 @@ export default function Footer() {
     <footer className="border-t border-white/10 bg-forge-dark text-white">
       <div className="container-forge grid gap-10 px-4 py-14 sm:px-6 md:grid-cols-3 lg:px-8">
         <div>
-          <img src="/logo-forge3d-transparent.png" alt="FORGE3D" className="mb-5 h-16 w-auto object-contain" />
+          <img src="/logo-forge3d-compact.webp" width="62" height="64" alt="FORGE3D" className="mb-5 h-16 w-auto object-contain" />
           <p className="max-w-sm text-sm leading-6 text-white/55">3D printing, software development, business automation and AI research from Tunisia.</p>
           <a href="/forgeoria" className="mt-6 inline-flex flex-col gap-2 rounded-2xl border border-white/10 bg-white/[.03] p-4 transition-colors hover:border-forge-orange/40" aria-label="ForgeOria — Automation that moves your business forward">
             <ForgeOriaLogo className="h-9 w-auto" fallbackClassName="text-2xl" />
