@@ -1,5 +1,6 @@
 import { ExternalLink, Mail, MapPin, ShoppingBag } from 'lucide-react';
 import { ForgeOriaLogo } from './forgeoria/BrandMark';
+import ProtectedEmailLink from './ProtectedEmailLink';
 
 export default function Footer() {
   return (
@@ -25,13 +26,13 @@ export default function Footer() {
         <div>
           <h2 className="mb-4 text-sm font-bold uppercase tracking-widest text-white/90">Contact</h2>
           <div className="space-y-3 text-sm text-white/55">
-            <a href="mailto:contact@forge3d.tech" className="flex items-center gap-2 hover:text-forge-orange"><Mail size={15} /> contact@forge3d.tech</a>
+            <ProtectedEmailLink className="flex items-center gap-2 hover:text-forge-orange"><Mail size={15} /><span><span>contact</span><span>@forge3d.tech</span></span></ProtectedEmailLink>
             <p className="flex items-center gap-2"><MapPin size={15} /> Tunisia</p>
             <a href="https://shop.forge3d.tech" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 hover:text-forge-orange"><ShoppingBag size={15} /> 3D printing shop <ExternalLink size={12} /></a>
           </div>
         </div>
       </div>
-      <div className="border-t border-white/10 px-4 py-5 text-center text-xs text-white/35">© {new Date().getFullYear()} FORGE3D. All rights reserved.</div>
+      <div className="border-t border-white/10 px-4 py-5 text-center text-xs text-white/60">© {new Date().getFullYear()} FORGE3D. All rights reserved.</div>
     </footer>
   );
 }

@@ -12,7 +12,7 @@ export const SIGNATURE = {
 
 // Supplied separately (orange symbol + white wordmark on an opaque anthracite background): dark backgrounds only.
 // width/height = real pixel size of the installed asset; keep in sync if it is replaced.
-export const FORGEORIA_LOGO = { src: '/brand/forgeoria-logo.png', width: 2172, height: 724 } as const;
+export const FORGEORIA_LOGO = { src: '/brand/forgeoria-logo.webp', width: 512, height: 171 } as const;
 
 export const MAILTO = `mailto:contact@forge3d.tech?subject=${encodeURIComponent('ForgeOria — discovery')}`;
 

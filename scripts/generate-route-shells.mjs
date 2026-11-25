@@ -38,6 +38,35 @@ const routes = {
 
 const template = await readFile('dist/index.html', 'utf8');
 const { render } = await import('../.ssr/entry-server.js');
+const clientEntry = template.match(/<script type="module"[^>]+src="([^"]+)"[^>]*><\/script>/)?.[1];
+
+if (!clientEntry) throw new Error('Entrée cliente Vite introuvable.');
+
+const bootstrap = `const entry=${JSON.stringify(clientEntry)};
+let ready=false;
+let loading;
+const load=()=>loading??=(import(entry).then(()=>{ready=true;}));
+document.querySelectorAll('.reveal').forEach((element)=>element.classList.add('visible'));
+document.addEventListener('click',async(event)=>{
+  if(ready) return;
+  const target=event.target instanceof Element?event.target.closest('header button,button[type="submit"],a.protected-email'):null;
+  if(!target) return;
+  event.preventDefault();
+  event.stopImmediatePropagation();
+  await load();
+  requestAnimationFrame(()=>target.click());
+},true);
+document.addEventListener('submit',async(event)=>{
+  if(ready) return;
+  event.preventDefault();
+  event.stopImmediatePropagation();
+  const form=event.target;
+  await load();
+  requestAnimationFrame(()=>form.requestSubmit());
+},true);
+`;
+
+await writeFile('dist/vigiparc-bootstrap.js', bootstrap);
 
 for (const [route, meta] of Object.entries(routes)) {
   const url = `https://forge3d.tech/${route}`;
@@ -53,7 +82,10 @@ for (const [route, meta] of Object.entries(routes)) {
     .replace(/<meta name="twitter:description" content="[^"]*"\s*\/>/, `<meta name="twitter:description" content="${meta.description}" />`);
 
   if (route.startsWith('vigiparc')) {
-    html = html.replace('<div id="root"></div>', `<div id="root">${render(`/${route}`)}</div>`);
+    html = html
+      .replace('<div id="root"></div>', `<div id="root">${render(`/${route}`)}</div>`)
+      .replace(/<script type="module"[^>]+src="[^"]+"[^>]*><\/script>/, '<script type="module" src="/vigiparc-bootstrap.js"></script>')
+      .replace(/\s*<link rel="modulepreload"[^>]*>/g, '');
   }
 
   if (route === 'forgeoria' || route.startsWith('vigiparc')) {

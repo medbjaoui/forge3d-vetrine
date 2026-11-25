@@ -118,11 +118,11 @@ h1, h2, h3, h4, h5, h6 {
   }
 
   .btn-primary {
-    @apply inline-flex items-center gap-2 bg-forge-orange hover:bg-forge-orange-dark text-white font-semibold px-6 py-3 rounded-lg transition-all duration-200 hover:shadow-forge-glow hover:-translate-y-0.5 active:translate-y-0;
+    @apply inline-flex items-center gap-2 bg-forge-orange hover:bg-forge-orange-dark text-forge-dark font-semibold px-6 py-3 rounded-lg transition-all duration-200 hover:shadow-forge-glow hover:-translate-y-0.5 active:translate-y-0;
   }
 
   .btn-secondary {
-    @apply inline-flex items-center gap-2 border border-forge-orange text-forge-orange hover:bg-forge-orange hover:text-white font-semibold px-6 py-3 rounded-lg transition-all duration-200;
+    @apply inline-flex items-center gap-2 border border-forge-orange text-orange-700 hover:bg-forge-orange hover:text-forge-dark font-semibold px-6 py-3 rounded-lg transition-all duration-200;
   }
 
   .btn-ghost {
@@ -139,6 +139,16 @@ h1, h2, h3, h4, h5, h6 {
 
   .section-tag {
     @apply inline-flex items-center gap-2 text-forge-orange font-semibold text-sm uppercase tracking-widest mb-4;
+  }
+
+  .bg-white .section-tag,
+  .bg-forge-gray .section-tag {
+    @apply text-orange-700;
+  }
+
+  .vigiparc-shell > section:not(:first-of-type):not(:last-of-type) {
+    content-visibility: auto;
+    contain-intrinsic-size: auto 800px;
   }
 
   .section-title {

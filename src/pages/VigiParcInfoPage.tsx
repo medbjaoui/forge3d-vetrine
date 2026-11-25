@@ -1,9 +1,11 @@
 import { ArrowLeft, ArrowRight, CheckCircle2 } from 'lucide-react';
 import Seo from '../components/Seo';
 import VigiParcNav from '../components/VigiParcNav';
+import ProtectedEmailLink from '../components/ProtectedEmailLink';
+import type { ReactNode } from 'react';
 
 type ClePage = 'fonctionnalites' | 'iso-27001' | 'bornes' | 'securite-confidentialite' | 'offres' | 'technologie' | 'a-propos' | 'contact' | 'mentions-legales' | 'confidentialite';
-type Section = { titre: string; texte: string; points?: string[] };
+type Section = { titre: string; texte: ReactNode; points?: string[] };
 type Page = { titre: string; description: string; sections: Section[] };
 
 const pages: Record<ClePage, Page> = {
@@ -94,7 +96,7 @@ const pages: Record<ClePage, Page> = {
     description: 'Le site ne dépose aucun cookie de suivi et ne charge aucun outil de mesure d’audience.',
     sections: [
       { titre: 'Données du formulaire', texte: 'Nom, fonction, organisation, e-mail, téléphone facultatif, taille du parc, message et preuve de consentement sont utilisés pour répondre à la demande.' },
-      { titre: 'Durée et droits', texte: 'Sans contact actif, les prospects sont supprimés après trois ans. Une demande d’accès, de rectification ou de suppression peut être adressée à contact@forge3d.tech.' },
+      { titre: 'Durée et droits', texte: <>Sans contact actif, les prospects sont supprimés après trois ans. Une demande d’accès, de rectification ou de suppression peut être adressée à <ProtectedEmailLink />.</> },
       { titre: 'Cadre applicable', texte: 'Le traitement respecte la loi organique tunisienne n° 2004-63 et, pour les visiteurs européens, les principes du RGPD.' },
     ],
   },

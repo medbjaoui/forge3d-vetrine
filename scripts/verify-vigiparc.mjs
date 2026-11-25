@@ -36,7 +36,9 @@ exiger(coquille.includes('https://forge3d.tech/vigiparc'), 'La coquille SEO Vigi
 exiger(coquille.includes('SoftwareApplication') && coquille.includes('VigiParc'), 'Les données structurées sont absentes.');
 exiger(coquille.includes('Votre parc, votre sécurité et vos preuves'), 'Le contenu VigiParc doit être prérendu.');
 exiger(coquille.includes('width="55" height="56"') && coquille.includes('width="62" height="64"'), 'Les dimensions des logos doivent être réservées.');
-for (const image of ['public/logo-forge3d-compact.webp', 'public/favicon.png', 'public/apple-touch-icon.png']) {
+exiger(coquille.includes('/vigiparc-bootstrap.js') && !coquille.includes('rel="modulepreload"'), 'Le JavaScript VigiParc doit être chargé à la première interaction.');
+exiger(existsSync(join(racine, 'dist/vigiparc-bootstrap.js')), 'Le chargeur progressif VigiParc est absent.');
+for (const image of ['public/logo-forge3d-compact.webp', 'public/brand/forgeoria-logo.webp', 'public/favicon.png', 'public/apple-touch-icon.png']) {
   exiger(existsSync(join(racine, image)), `Image optimisée absente : ${image}`);
   exiger(statSync(join(racine, image)).size < 20_000, `Image critique trop lourde : ${image}`);
 }

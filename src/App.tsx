@@ -67,7 +67,7 @@ export default function App({ initialPath }: AppProps = {}) {
     <div className="min-h-screen bg-white">
       <a href="#main-content" className="skip-link">Skip to content</a>
       <Header currentPath={path} />
-      <main id="main-content"><Suspense fallback={null}><Page /></Suspense></main>
+      <main id="main-content" className={path.startsWith('/vigiparc') ? 'vigiparc-shell' : undefined}><Suspense fallback={null}><Page /></Suspense></main>
       <Footer />
       <ScrollToTop />
     </div>
