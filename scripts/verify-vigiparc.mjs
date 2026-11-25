@@ -30,6 +30,7 @@ exiger(existsSync(join(racine, 'public/fonts/Inter-latin-var.woff2')), 'La polic
 exiger(existsSync(join(racine, 'public/fonts/LICENCE-Inter.txt')), 'La licence de la police Inter est absente.');
 exiger(nginx.includes('Strict-Transport-Security'), 'HSTS est absent.');
 exiger(nginx.includes('location = /api/v1/prospects'), 'Le proxy vers Central est absent.');
+exiger(nginx.includes('limit_req zone=vigiparc_prospects'), 'La limitation de débit du formulaire est absente.');
 exiger(sitemap.includes('https://forge3d.tech/vigiparc'), 'VigiParc est absent du sitemap.');
 exiger(coquille.includes('https://forge3d.tech/vigiparc'), 'La coquille SEO VigiParc est absente.');
 exiger(coquille.includes('SoftwareApplication') && coquille.includes('VigiParc'), 'Les données structurées sont absentes.');
