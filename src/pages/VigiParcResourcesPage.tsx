@@ -12,6 +12,7 @@ const ressources = [
 const questions = [
   ['VigiParc remplace-t-il Active Directory ou Intune ?', 'Non. VigiParc peut gérer des postes par agents et réduire certaines dépendances, mais le périmètre dépend de l’infrastructure et des usages à conserver.'],
   ['Où sont stockées les données ?', 'Sur le serveur VigiParc installé chez le client. Les remontées facultatives vers Central sont limitées à des états techniques agrégés.'],
+  ['ISO 27001 est-elle obligatoire en Tunisie ?', 'Non, la certification ISO/IEC 27001 n’est pas une obligation générale. Le décret-loi n° 2023-17 impose en revanche un audit de cybersécurité périodique, au moins annuel, aux organismes entrant dans son champ. L’assujettissement doit être confirmé avec l’ANCS ou un expert habilité.'],
   ['VigiParc certifie-t-il ISO 27001 ?', 'Non. Il structure le suivi et certaines preuves ; la gouvernance, l’audit et la certification restent des démarches distinctes.'],
   ['Peut-on commencer par un petit parc ?', 'Le cadrage commercial vise les PME de 5 à 500 équipements, avec un périmètre progressif défini sur devis.'],
 ];

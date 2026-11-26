@@ -12,6 +12,8 @@ const fichiers = (dossier) => readdirSync(dossier).flatMap((nom) => {
 });
 
 const page = lire('src/pages/VigiParcPage.tsx');
+const pageIso = lire('src/pages/VigiParcInfoPage.tsx');
+const ressources = lire('src/pages/VigiParcResourcesPage.tsx');
 const nginx = lire('nginx.conf');
 const index = lire('index.html');
 const sitemap = lire('public/sitemap.xml');
@@ -25,6 +27,11 @@ for (const champ of ['prenom', 'nom', 'societe', 'fonction', 'email', 'telephone
 }
 exiger(page.includes("fetch('/api/v1/prospects'"), 'Le formulaire ne cible pas VigiParc Central.');
 exiger(page.includes('Illustration, pas une capture produit'), 'L’aperçu schématique n’est pas signalé comme illustration.');
+exiger(page.includes('Décret-loi n° 2023-17') && page.includes('au moins tous les douze mois'), 'Le cadre tunisien de l’audit cyber est absent de la page principale.');
+exiger(pageIso.includes('ISO 27001 n’est pas une obligation générale') && pageIso.includes('expert habilité'), 'La distinction entre audit obligatoire et certification ISO est absente.');
+exiger(pageIso.includes('https://www.ancs.tn/fr/audit-reglementaire'), 'La source officielle ANCS est absente.');
+exiger(ressources.includes('ISO 27001 est-elle obligatoire en Tunisie ?'), 'La FAQ réglementaire tunisienne est absente.');
+exiger(!page.includes('ISO 27001 est obligatoire') && !pageIso.includes('ISO 27001 est obligatoire'), 'Le site présente à tort ISO 27001 comme une obligation générale.');
 exiger(!page.includes('33 collecteurs'), 'Un nombre de collecteurs non configurable est encore publié.');
 exiger(!page.includes('mailto:'), 'Le parcours VigiParc ne doit pas contourner le formulaire qualifié.');
 exiger(!index.includes('fonts.googleapis.com') && !index.includes('fonts.gstatic.com'), 'Une police Google est encore chargée.');
