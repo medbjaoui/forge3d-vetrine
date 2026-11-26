@@ -4,6 +4,9 @@ const liens = [
   ['Bornes', '/vigiparc/bornes'],
   ['Sécurité', '/vigiparc/securite-confidentialite'],
   ['Offres', '/vigiparc/offres'],
+  ['Calculateur', '/vigiparc/calculateur'],
+  ['Comparatif', '/vigiparc/comparatif'],
+  ['Ressources', '/vigiparc/ressources'],
   ['Technologie', '/vigiparc/technologie'],
   ['Contact', '/vigiparc/contact'],
 ];

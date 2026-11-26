@@ -74,6 +74,7 @@ services:
       SMTP_PASSWORD: ${SMTP_PASSWORD}
       SMTP_FROM: ${SMTP_FROM:-contact@forge3d.tech}
       SMTP_TO: ${SMTP_TO:-contact@forge3d.tech}
+      VIGIPARC_CENTRAL_URL: http://vigiparc-central:8000/api/v1/prospects
       CORS_ORIGIN: "https://forge3d.tech,https://www.forge3d.tech"
       TZ: Africa/Tunis
     expose:

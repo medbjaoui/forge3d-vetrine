@@ -1,40 +1,44 @@
 import { FormEvent, useRef, useState } from 'react';
-import { ArrowRight, CheckCircle2, Database, ExternalLink, FileCheck2, LockKeyhole, MonitorCog, Server, ShieldCheck } from 'lucide-react';
+import { ArrowRight, CheckCircle2, Database, ExternalLink, FileCheck2, LockKeyhole, MonitorCog, Server, ShieldCheck, Wrench } from 'lucide-react';
 import Seo from '../components/Seo';
 import VigiParcNav from '../components/VigiParcNav';
-
-const modules = [
-  ['Parc', 'Inventaire Windows et Linux, rapprochement Active Directory, conformité, logiciels et licences.'],
-  ['Sécurité', 'Alertes, correctifs, durcissement, isolement de poste et inventaire réseau.'],
-  ['Support', 'Tickets et prise en main à distance depuis un portail unique.'],
-  ['Conformité', 'ISO 27001:2022 outillée, preuves automatiques et export pour l’auditeur.'],
-  ['Employés', 'Demandes, coffre, heures, mobiles et bornes en libre-service.'],
-  ['Plateforme', 'Sauvegardes chiffrées, supervision, certificats et mises à jour signées.'],
-];
+import { libelleDisponibilite, modulesVigiParc } from '../data/vigiparc-catalogue';
 
 const guarantees = [
   { icon: Server, title: 'Installé chez vous', text: 'VigiParc fonctionne sur un serveur Debian dans votre infrastructure. Vos données restent sous votre contrôle.' },
   { icon: ShieldCheck, title: 'Sécurité par défaut', text: 'SSO, double authentification, rôles, journal d’audit chaîné et flux central sortant uniquement.' },
-  { icon: FileCheck2, title: 'ISO 27001 outillée', text: 'Les 93 mesures sont structurées, avec 33 collecteurs de preuves automatiques. VigiParc ne délivre pas de certification.' },
+  { icon: FileCheck2, title: 'ISO 27001 outillée', text: 'Les 93 mesures sont structurées et les collecteurs publiés dépendent de la version validée. VigiParc ne délivre pas de certification.' },
 ];
 
 export default function VigiParcPage() {
   const debutSaisie = useRef(Date.now());
-  const [etatFormulaire, setEtatFormulaire] = useState<'repos' | 'envoi' | 'succes' | 'erreur'>('repos');
+  const [etatFormulaire, setEtatFormulaire] = useState<'repos' | 'envoi' | 'succes' | 'attente' | 'erreur'>('repos');
 
   const envoyerDemande = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     setEtatFormulaire('envoi');
     const formulaire = event.currentTarget;
     const donnees = new FormData(formulaire);
+    const details = [
+      `Prénom : ${String(donnees.get('prenom') || '')}`,
+      `Pays : ${String(donnees.get('pays') || '')}`,
+      `Nombre de sites : ${String(donnees.get('sites') || '')}`,
+      `Infrastructure actuelle : ${String(donnees.get('infrastructure') || '')}`,
+      `Active Directory : ${String(donnees.get('active_directory') || '')}`,
+      `Besoin en bornes Linux : ${donnees.get('bornes_linux') === 'on' ? 'Oui' : 'Non'}`,
+      `Besoin ISO 27001 : ${donnees.get('iso_27001') === 'on' ? 'Oui' : 'Non'}`,
+      `Fonctionnalités recherchées : ${donnees.getAll('fonctionnalites').join(', ') || 'Non précisées'}`,
+      '',
+      String(donnees.get('message') || ''),
+    ].join('\n').slice(0, 4000);
     const contenu = {
-      nom: String(donnees.get('nom') || ''),
+      nom: `${String(donnees.get('prenom') || '').trim()} ${String(donnees.get('nom') || '').trim()}`.trim().slice(0, 160),
       fonction: String(donnees.get('fonction') || ''),
-      organisation: String(donnees.get('organisation') || ''),
+      organisation: String(donnees.get('societe') || ''),
       email: String(donnees.get('email') || ''),
       telephone: String(donnees.get('telephone') || '') || null,
       postes: String(donnees.get('postes') || ''),
-      message: String(donnees.get('message') || '') || null,
+      message: details,
       consentement: donnees.get('consentement') === 'on',
       piege: String(donnees.get('site_web') || ''),
       duree_saisie_ms: Date.now() - debutSaisie.current,
@@ -46,9 +50,10 @@ export default function VigiParcPage() {
         body: JSON.stringify(contenu),
       });
       if (!reponse.ok) throw new Error('Réponse invalide');
+      const resultat = await reponse.json() as { queued?: boolean };
       formulaire.reset();
       debutSaisie.current = Date.now();
-      setEtatFormulaire('succes');
+      setEtatFormulaire(resultat.queued ? 'attente' : 'succes');
     } catch {
       setEtatFormulaire('erreur');
     }
@@ -64,20 +69,29 @@ export default function VigiParcPage() {
           <div>
             <p className="section-tag">Un produit FORGE3D · Tunisie</p>
             <div className="mb-6 flex items-center gap-4"><img src="/logo-vigiparc.svg" width="64" height="64" alt="" className="rounded-2xl shadow-lg" /><span className="text-2xl font-bold">VigiParc</span></div>
-            <h1 className="max-w-4xl text-5xl font-bold leading-[.98] sm:text-6xl">Votre parc, votre sécurité et vos preuves <span className="text-gradient">au même endroit.</span></h1>
-            <p className="mt-7 max-w-2xl text-lg leading-8 text-white/65">Pour les PME et administrations de 20 à 500 postes. Un portail unique, installé sur votre serveur, avec une équipe locale francophone.</p>
+            <h1 className="max-w-4xl text-5xl font-bold leading-[.98] sm:text-6xl">Gérez votre parc IT <span className="text-gradient">sur votre infrastructure.</span></h1>
+            <p className="mt-7 max-w-2xl text-lg leading-8 text-white/65">Pour les PME de 5 à 500 équipements : postes Windows, Linux, identités, sécurité, support et preuves de conformité réunis sans imposer Windows Server, Active Directory ou Intune.</p>
             <div className="mt-9 flex flex-col gap-3 sm:flex-row">
               <a href="#demonstration" className="btn-primary justify-center">Demander une démonstration <ArrowRight size={17} /></a>
               <a href="#fonctionnalites" className="btn-ghost justify-center border border-white/15">Voir les fonctionnalités</a>
             </div>
           </div>
           <div className="rounded-3xl border border-white/10 bg-white/[.04] p-6 shadow-2xl backdrop-blur-sm">
-            <div className="mb-5 flex items-center justify-between"><span className="text-sm font-bold uppercase tracking-[.18em] text-white/70">Vue synthétique</span><span className="rounded-full bg-emerald-400/15 px-3 py-1 text-xs font-bold text-emerald-300">Données fictives</span></div>
-            {[['Postes gérés', '112'], ['Postes conformes', '103'], ['Services disponibles', '23 / 24'], ['Mesures ISO suivies', '93']].map(([label, value]) => <div key={label} className="flex items-center justify-between border-t border-white/10 py-4"><span className="text-sm text-white/60">{label}</span><strong className="text-xl">{value}</strong></div>)}
+            <div className="mb-5 flex items-center justify-between"><span className="text-sm font-bold uppercase tracking-[.18em] text-white/70">Aperçu schématique</span><span className="rounded-full bg-amber-300/15 px-3 py-1 text-xs font-bold text-amber-200">Illustration, pas une capture produit</span></div>
+            {[['Parc', 'Inventaire consolidé'], ['Sécurité', 'Écarts priorisés'], ['Services', 'État supervisé'], ['Conformité', 'Preuves structurées']].map(([label, value]) => <div key={label} className="flex items-center justify-between gap-5 border-t border-white/10 py-4"><span className="text-sm text-white/60">{label}</span><strong className="text-right text-sm">{value}</strong></div>)}
           </div>
         </div>
       </section>
       <VigiParcNav />
+
+      <section className="section-padding bg-forge-gray" aria-labelledby="problemes-vigiparc">
+        <div className="container-forge grid gap-10 lg:grid-cols-[.85fr_1.15fr]">
+          <div><p className="section-tag">Le constat</p><h2 id="problemes-vigiparc" className="section-title text-forge-text">L’IT d’une PME ne devrait pas dépendre d’un empilement opaque.</h2></div>
+          <div className="grid gap-4 sm:grid-cols-2">
+            {['Coûts d’infrastructure difficiles à lire', 'Outils séparés et informations dispersées', 'Opérations manuelles peu traçables', 'Visibilité limitée sur la sécurité'].map((item) => <div key={item} className="flex gap-3 rounded-2xl border border-slate-200 bg-white p-5 text-sm leading-6 text-forge-text-muted"><Wrench className="shrink-0 text-forge-orange" size={19} />{item}</div>)}
+          </div>
+        </div>
+      </section>
 
       <section className="section-padding bg-white" aria-labelledby="benefices-vigiparc">
         <div className="container-forge">
@@ -92,8 +106,9 @@ export default function VigiParcPage() {
         <div className="container-forge">
           <div className="max-w-3xl reveal"><p className="section-tag">Fonctionnalités</p><h2 id="modules-vigiparc" className="section-title text-forge-text">Un portail pour les équipes IT, la direction et les employés.</h2></div>
           <div className="mt-12 grid gap-5 md:grid-cols-2 lg:grid-cols-3">
-            {modules.map(([title, text]) => <article key={title} className="reveal rounded-2xl border border-slate-200 bg-white p-6"><div className="mb-4 flex items-center gap-3 text-forge-orange"><CheckCircle2 size={20} /><h3 className="font-bold text-forge-text">{title}</h3></div><p className="text-sm leading-7 text-forge-text-muted">{text}</p></article>)}
+            {modulesVigiParc.map((module) => <article key={module.id} className="reveal rounded-2xl border border-slate-200 bg-white p-6"><div className="mb-4 flex items-center gap-3 text-forge-orange"><CheckCircle2 size={20} /><h3 className="font-bold text-forge-text">{module.nom}</h3></div><p className="text-sm leading-7 text-forge-text-muted">{module.resume}</p><p className="mt-4 text-xs font-bold uppercase tracking-wide text-slate-500">{libelleDisponibilite[module.disponibilite]} · {module.offre}</p></article>)}
           </div>
+          <a className="btn-secondary mt-8" href="/vigiparc/fonctionnalites">Explorer les domaines fonctionnels</a>
       </div>
       </section>
 
@@ -106,6 +121,10 @@ export default function VigiParcPage() {
         </div>
       </section>
 
+      <section className="section-padding bg-forge-gray" aria-labelledby="mise-en-service">
+        <div className="container-forge"><div className="max-w-3xl"><p className="section-tag">Mise en service</p><h2 id="mise-en-service" className="section-title text-forge-text">Un déploiement cadré, par étapes.</h2><p className="section-subtitle mt-5">Le périmètre réel est validé avec l’équipe IT avant toute généralisation.</p></div><div className="mt-12 grid gap-5 md:grid-cols-2 lg:grid-cols-4">{[['01', 'Cadrage', 'Parc, sites, usages, dépendances et objectifs.'], ['02', 'Pilote', 'Installation Docker sur Debian et validation sur un périmètre limité.'], ['03', 'Déploiement', 'Enrôlement progressif des équipements et transfert de compétences.'], ['04', 'Exploitation', 'Support, maintenance, sauvegardes et évolutions selon l’offre.']].map(([numero, titre, texte]) => <article key={numero} className="rounded-2xl border border-slate-200 bg-white p-6"><span className="text-sm font-bold text-orange-700">{numero}</span><h3 className="mt-5 text-xl font-bold text-forge-text">{titre}</h3><p className="mt-3 text-sm leading-7 text-forge-text-muted">{texte}</p></article>)}</div><div className="mt-9 flex flex-wrap gap-4"><a className="btn-primary" href="#demonstration">Préparer un pilote</a><a className="btn-secondary" href="/vigiparc/calculateur">Estimer les coûts</a></div></div>
+      </section>
+
       <section id="demonstration" className="section-padding bg-white">
         <div className="container-forge grid gap-10 rounded-3xl border border-slate-200 bg-forge-gray p-8 sm:p-12 lg:grid-cols-[.8fr_1.2fr]">
           <div>
@@ -115,18 +134,24 @@ export default function VigiParcPage() {
             <p className="mt-6 text-sm leading-6 text-forge-text-muted">Les informations servent uniquement à traiter votre demande. Aucun outil de suivi ni service anti-spam tiers n’est chargé.</p>
           </div>
           <form className="grid gap-4 sm:grid-cols-2" onSubmit={envoyerDemande}>
-            <label className="text-sm font-semibold text-forge-text">Nom<input className="mt-2 w-full rounded-lg border border-slate-300 bg-white px-4 py-3 font-normal" name="nom" required minLength={2} maxLength={160} autoComplete="name" /></label>
+            <label className="text-sm font-semibold text-forge-text">Prénom<input className="mt-2 w-full rounded-lg border border-slate-300 bg-white px-4 py-3 font-normal" name="prenom" required minLength={2} maxLength={80} autoComplete="given-name" /></label>
+            <label className="text-sm font-semibold text-forge-text">Nom<input className="mt-2 w-full rounded-lg border border-slate-300 bg-white px-4 py-3 font-normal" name="nom" required minLength={2} maxLength={80} autoComplete="family-name" /></label>
+            <label className="text-sm font-semibold text-forge-text">Société<input className="mt-2 w-full rounded-lg border border-slate-300 bg-white px-4 py-3 font-normal" name="societe" required minLength={2} maxLength={200} autoComplete="organization" /></label>
             <label className="text-sm font-semibold text-forge-text">Fonction<input className="mt-2 w-full rounded-lg border border-slate-300 bg-white px-4 py-3 font-normal" name="fonction" required minLength={2} maxLength={160} autoComplete="organization-title" /></label>
-            <label className="text-sm font-semibold text-forge-text">Organisation<input className="mt-2 w-full rounded-lg border border-slate-300 bg-white px-4 py-3 font-normal" name="organisation" required minLength={2} maxLength={200} autoComplete="organization" /></label>
             <label className="text-sm font-semibold text-forge-text">E-mail professionnel<input className="mt-2 w-full rounded-lg border border-slate-300 bg-white px-4 py-3 font-normal" type="email" name="email" required maxLength={254} autoComplete="email" /></label>
             <label className="text-sm font-semibold text-forge-text">Téléphone <span className="font-normal text-forge-text-muted">(facultatif)</span><input className="mt-2 w-full rounded-lg border border-slate-300 bg-white px-4 py-3 font-normal" type="tel" name="telephone" maxLength={40} autoComplete="tel" /></label>
-            <label className="text-sm font-semibold text-forge-text">Nombre de postes<select className="mt-2 w-full rounded-lg border border-slate-300 bg-white px-4 py-3 font-normal" name="postes" required defaultValue=""><option value="" disabled>Choisir</option><option value="<20">Moins de 20</option><option value="20-50">20 à 50</option><option value="50-150">50 à 150</option><option value="150-500">150 à 500</option><option value=">500">Plus de 500</option></select></label>
+            <label className="text-sm font-semibold text-forge-text">Pays<input className="mt-2 w-full rounded-lg border border-slate-300 bg-white px-4 py-3 font-normal" name="pays" required minLength={2} maxLength={100} autoComplete="country-name" /></label>
+            <label className="text-sm font-semibold text-forge-text">Nombre de sites<input className="mt-2 w-full rounded-lg border border-slate-300 bg-white px-4 py-3 font-normal" type="number" name="sites" required min="1" max="100" defaultValue="1" /></label>
+            <label className="text-sm font-semibold text-forge-text">Nombre de postes<select className="mt-2 w-full rounded-lg border border-slate-300 bg-white px-4 py-3 font-normal" name="postes" required defaultValue=""><option value="" disabled>Choisir</option><option value="<20">5 à 19</option><option value="20-50">20 à 50</option><option value="50-150">51 à 150</option><option value="150-500">151 à 500</option><option value=">500">Plus de 500</option></select></label>
+            <label className="text-sm font-semibold text-forge-text">Infrastructure actuelle<select className="mt-2 w-full rounded-lg border border-slate-300 bg-white px-4 py-3 font-normal" name="infrastructure" required defaultValue=""><option value="" disabled>Choisir</option><option>Serveurs sur site</option><option>Cloud</option><option>Hybride</option><option>Postes sans serveur central</option><option>À préciser</option></select></label>
+            <label className="text-sm font-semibold text-forge-text sm:col-span-2">Active Directory<select className="mt-2 w-full rounded-lg border border-slate-300 bg-white px-4 py-3 font-normal" name="active_directory" required defaultValue=""><option value="" disabled>Choisir</option><option>Présent et à conserver</option><option>Présent, dépendance à réduire</option><option>Absent</option><option>À confirmer</option></select></label>
+            <fieldset className="sm:col-span-2 rounded-xl border border-slate-200 bg-white p-4"><legend className="px-2 text-sm font-semibold text-forge-text">Besoins prioritaires</legend><div className="mt-2 grid gap-3 sm:grid-cols-2"><label className="flex items-start gap-3 text-sm text-forge-text-muted"><input className="mt-1" type="checkbox" name="bornes_linux" />Bornes Linux</label><label className="flex items-start gap-3 text-sm text-forge-text-muted"><input className="mt-1" type="checkbox" name="iso_27001" />Préparation ISO 27001</label>{['Gestion du parc', 'Identités et accès', 'Sécurité et correctifs', 'Assistance informatique', 'Sauvegardes', 'Gestion multisite'].map((item) => <label key={item} className="flex items-start gap-3 text-sm text-forge-text-muted"><input className="mt-1" type="checkbox" name="fonctionnalites" value={item} />{item}</label>)}</div></fieldset>
             <label className="sm:col-span-2 text-sm font-semibold text-forge-text">Message <span className="font-normal text-forge-text-muted">(facultatif)</span><textarea className="mt-2 min-h-28 w-full rounded-lg border border-slate-300 bg-white px-4 py-3 font-normal" name="message" maxLength={4000} /></label>
             <label className="forgeoria-hp" aria-hidden="true">Site web<input name="site_web" tabIndex={-1} autoComplete="off" /></label>
             <label className="sm:col-span-2 flex items-start gap-3 text-sm leading-6 text-forge-text-muted"><input className="mt-1" type="checkbox" name="consentement" required />J’accepte que Forge 3D utilise ces informations pour répondre à ma demande de démonstration.</label>
             <div className="sm:col-span-2 flex flex-wrap items-center gap-4">
               <button className="btn-primary justify-center" type="submit" disabled={etatFormulaire === 'envoi'}>{etatFormulaire === 'envoi' ? 'Envoi…' : 'Envoyer la demande'} <ExternalLink size={15} /></button>
-              <p className="text-sm" aria-live="polite">{etatFormulaire === 'succes' && <span className="text-emerald-700">Merci, votre demande a bien été enregistrée.</span>}{etatFormulaire === 'erreur' && <span className="text-red-700">L’envoi a échoué. Réessayez dans quelques instants.</span>}</p>
+              <p className="text-sm" aria-live="polite">{etatFormulaire === 'succes' && <span className="text-emerald-700">Merci, votre demande a bien été enregistrée.</span>}{etatFormulaire === 'attente' && <span className="text-amber-800">Votre demande est enregistrée dans la file sécurisée et sera transmise automatiquement à Central.</span>}{etatFormulaire === 'erreur' && <span className="text-red-700">La demande n’a pas pu être enregistrée. Vos champs sont conservés : réessayez dans quelques instants.</span>}</p>
             </div>
           </form>
         </div>

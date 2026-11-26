@@ -19,7 +19,7 @@ const routes = {
   },
   vigiparc: {
     title: 'VigiParc — Gestion de parc, sécurité et conformité | FORGE3D',
-    description: 'VigiParc centralise la gestion de parc, la sécurité et le suivi ISO 27001 pour les PME, avec des données conservées chez le client.',
+    description: 'VigiParc centralise la gestion de parc, la sécurité et le suivi ISO 27001 pour les PME de 5 à 500 équipements, sur leur infrastructure.',
     type: 'product',
   },
   'vigiparc/fonctionnalites': { title: 'Fonctionnalités | VigiParc — FORGE3D', description: 'Parc, sécurité, support, identités, conformité et services employés réunis dans VigiParc.', type: 'product' },
@@ -32,6 +32,17 @@ const routes = {
   'vigiparc/contact': { title: 'Démonstration | VigiParc — FORGE3D', description: 'Demandez une démonstration VigiParc adaptée à votre parc.', type: 'product' },
   'vigiparc/mentions-legales': { title: 'Mentions légales | VigiParc — FORGE3D', description: 'Mentions légales du site VigiParc édité par Forge 3D.', type: 'product' },
   'vigiparc/confidentialite': { title: 'Confidentialité | VigiParc — FORGE3D', description: 'Traitement des demandes de démonstration et droits des visiteurs du site VigiParc.', type: 'product' },
+  'vigiparc/postes-windows': { title: 'Gestion des postes Windows | VigiParc — FORGE3D', description: 'Gérer les postes Windows par agents sans rendre Windows Server obligatoire.', type: 'product' },
+  'vigiparc/sans-active-directory': { title: 'Gestion sans Active Directory obligatoire | VigiParc', description: 'Agents, identités applicatives et politiques locales selon les dépendances de votre environnement.', type: 'product' },
+  'vigiparc/identites': { title: 'Identités et accès | VigiParc — FORGE3D', description: 'Rôles, MFA, sessions et cycle de vie des accès dans VigiParc.', type: 'product' },
+  'vigiparc/politiques-securite': { title: 'Politiques de sécurité | VigiParc — FORGE3D', description: 'Définir les règles, constater les écarts et suivre les remédiations.', type: 'product' },
+  'vigiparc/logiciels': { title: 'Gestion des logiciels | VigiParc — FORGE3D', description: 'Inventaire, versions et cycle de vie logiciel dans VigiParc.', type: 'product' },
+  'vigiparc/cybersecurite': { title: 'Cybersécurité PME | VigiParc — FORGE3D', description: 'Regrouper alertes, vulnérabilités et état des protections selon les connecteurs activés.', type: 'product' },
+  'vigiparc/assistance': { title: 'Assistance informatique | VigiParc — FORGE3D', description: 'Tickets, diagnostic et prise en main à distance dans un parcours traçable.', type: 'product' },
+  'vigiparc/multisite': { title: 'Gestion multisite en préparation | VigiParc', description: 'Découvrez la cible multisite de VigiParc, clairement identifiée comme en préparation.', type: 'product' },
+  'vigiparc/calculateur': { title: 'Calculateur de coûts IT | VigiParc — FORGE3D', description: 'Comparez vos coûts IT actuels avec une hypothèse VigiParc à partir de vos propres données.', type: 'product' },
+  'vigiparc/comparatif': { title: 'Comparer les approches de gestion IT | VigiParc', description: 'Une grille neutre pour comparer les périmètres des solutions de gestion IT.', type: 'product' },
+  'vigiparc/ressources': { title: 'Ressources et FAQ | VigiParc — FORGE3D', description: 'Guides, réponses et informations produit pour préparer un projet VigiParc.', type: 'product' },
 };
 
 // /forgeassist is intentionally absent: nginx answers it with a 301 to /forgeoria.
@@ -93,7 +104,7 @@ for (const [route, meta] of Object.entries(routes)) {
       '@context': 'https://schema.org',
       '@type': 'SoftwareApplication',
       name: route.startsWith('vigiparc') ? 'VigiParc' : 'ForgeOria',
-      slogan: route.startsWith('vigiparc') ? 'Votre parc, votre sécurité et vos preuves au même endroit.' : 'Automation that moves your business forward.',
+      slogan: route.startsWith('vigiparc') ? 'Gérez votre parc IT sur votre infrastructure.' : 'Automation that moves your business forward.',
       applicationCategory: 'BusinessApplication',
       operatingSystem: 'Web',
       url,

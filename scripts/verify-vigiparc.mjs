@@ -16,14 +16,16 @@ const nginx = lire('nginx.conf');
 const index = lire('index.html');
 const sitemap = lire('public/sitemap.xml');
 const coquille = lire('dist/vigiparc/index.html');
-const sousPages = ['fonctionnalites', 'iso-27001', 'bornes', 'securite-confidentialite', 'offres', 'technologie', 'a-propos', 'contact', 'mentions-legales', 'confidentialite'];
+const backend = lire('smtp-backend/server.js');
+const initialisation = lire('smtp-backend/init.sql');
+const sousPages = ['fonctionnalites', 'iso-27001', 'bornes', 'securite-confidentialite', 'offres', 'technologie', 'a-propos', 'contact', 'mentions-legales', 'confidentialite', 'postes-windows', 'sans-active-directory', 'identites', 'politiques-securite', 'logiciels', 'cybersecurite', 'assistance', 'multisite', 'calculateur', 'comparatif', 'ressources'];
 
-for (const champ of ['nom', 'fonction', 'organisation', 'email', 'telephone', 'postes', 'message', 'consentement']) {
+for (const champ of ['prenom', 'nom', 'societe', 'fonction', 'email', 'telephone', 'pays', 'sites', 'postes', 'infrastructure', 'active_directory', 'bornes_linux', 'iso_27001', 'fonctionnalites', 'message', 'consentement']) {
   exiger(page.includes(`name="${champ}"`), `Champ du formulaire absent : ${champ}`);
 }
 exiger(page.includes("fetch('/api/v1/prospects'"), 'Le formulaire ne cible pas VigiParc Central.');
-exiger(page.includes('33 collecteurs de preuves automatiques'), 'Le nombre de collecteurs ISO doit être 33.');
-exiger(page.includes('Données fictives'), 'Les indicateurs de démonstration ne sont pas signalés comme fictifs.');
+exiger(page.includes('Illustration, pas une capture produit'), 'L’aperçu schématique n’est pas signalé comme illustration.');
+exiger(!page.includes('33 collecteurs'), 'Un nombre de collecteurs non configurable est encore publié.');
 exiger(!page.includes('mailto:'), 'Le parcours VigiParc ne doit pas contourner le formulaire qualifié.');
 exiger(!index.includes('fonts.googleapis.com') && !index.includes('fonts.gstatic.com'), 'Une police Google est encore chargée.');
 exiger(existsSync(join(racine, 'public/fonts/Inter-latin-var.woff2')), 'La police Inter locale est absente.');
@@ -31,10 +33,13 @@ exiger(existsSync(join(racine, 'public/fonts/LICENCE-Inter.txt')), 'La licence d
 exiger(nginx.includes('Strict-Transport-Security'), 'HSTS est absent.');
 exiger(nginx.includes('location = /api/v1/prospects'), 'Le proxy vers Central est absent.');
 exiger(nginx.includes('limit_req zone=vigiparc_prospects'), 'La limitation de débit du formulaire est absente.');
+exiger(backend.includes('vigiparc_prospect_queue') && backend.includes('retraiterFileVigiParc'), 'La file de secours persistante ou sa reprise automatique est absente.');
+exiger(initialisation.includes('CREATE TABLE IF NOT EXISTS vigiparc_prospect_queue'), 'La table de file de secours est absente.');
+exiger(!initialisation.includes('PME Export') && !initialisation.includes('Groupe Industriel International'), 'Des faux témoignages sont encore initialisés.');
 exiger(sitemap.includes('https://forge3d.tech/vigiparc'), 'VigiParc est absent du sitemap.');
 exiger(coquille.includes('https://forge3d.tech/vigiparc'), 'La coquille SEO VigiParc est absente.');
 exiger(coquille.includes('SoftwareApplication') && coquille.includes('VigiParc'), 'Les données structurées sont absentes.');
-exiger(coquille.includes('Votre parc, votre sécurité et vos preuves'), 'Le contenu VigiParc doit être prérendu.');
+exiger(coquille.includes('Gérez votre parc IT'), 'Le contenu VigiParc doit être prérendu.');
 exiger(coquille.includes('width="55" height="56"') && coquille.includes('width="62" height="64"'), 'Les dimensions des logos doivent être réservées.');
 exiger(coquille.includes('/vigiparc-bootstrap.js') && !coquille.includes('rel="modulepreload"'), 'Le JavaScript VigiParc doit être chargé à la première interaction.');
 exiger(existsSync(join(racine, 'dist/vigiparc-bootstrap.js')), 'Le chargeur progressif VigiParc est absent.');
@@ -48,6 +53,8 @@ for (const page of sousPages) {
 }
 exiger(nginx.includes('try_files $uri $uri/ =404'), 'Les routes inconnues ne retournent pas une vraie 404.');
 exiger(nginx.includes('location ~ ^/vigiparc/(fonctionnalites|iso-27001|bornes|'), 'Les sous-pages VigiParc ne sont pas servies directement.');
+const calculateur = lire('dist/vigiparc/calculateur/index.html');
+exiger(calculateur.includes('Estimation non contractuelle') && calculateur.includes('toutes les licences Windows'), 'Les hypothèses protectrices du calculateur sont absentes.');
 
 const domainesInterdits = ['fonts.googleapis.com', 'fonts.gstatic.com', 'api.emailjs.com', 'formspree.io', 'googletagmanager.com'];
 const production = fichiers(join(racine, 'dist')).filter((chemin) => /\.(html|css|js)$/.test(chemin));

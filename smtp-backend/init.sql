@@ -29,6 +29,23 @@ CREATE INDEX idx_contact_status ON contact_requests(status);
 CREATE INDEX idx_contact_created ON contact_requests(created_at DESC);
 CREATE INDEX idx_contact_email ON contact_requests(email);
 
+-- File de secours durable pour les prospects VigiParc lorsque Central est indisponible.
+CREATE TABLE IF NOT EXISTS vigiparc_prospect_queue (
+    id BIGSERIAL PRIMARY KEY,
+    dedupe_key CHAR(64) UNIQUE NOT NULL,
+    payload JSONB NOT NULL,
+    status VARCHAR(20) NOT NULL DEFAULT 'pending',
+    attempts INTEGER NOT NULL DEFAULT 0,
+    next_attempt_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+    last_error_code VARCHAR(40),
+    created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+    updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+    delivered_at TIMESTAMPTZ
+);
+
+CREATE INDEX IF NOT EXISTS idx_vigiparc_queue_due
+    ON vigiparc_prospect_queue(status, next_attempt_at);
+
 -- ── Table: testimonials ───────────────────────────────────────────────────────
 -- Stocke les témoignages clients (avec modération)
 
@@ -133,20 +150,6 @@ SELECT
     COUNT(*) FILTER (WHERE created_at >= NOW() - INTERVAL '7 days') AS last_7_days,
     COUNT(*) FILTER (WHERE created_at >= NOW() - INTERVAL '30 days') AS last_30_days
 FROM contact_requests;
-
--- ══════════════════════════════════════════════════════════════════════════════
--- DONNÉES DE TEST (optionnel)
--- ══════════════════════════════════════════════════════════════════════════════
-
--- Exemple de témoignage approuvé
-INSERT INTO testimonials (name, role, company, sector, rating, quote, avatar, avatar_color, status, is_featured, approved_at)
-VALUES
-    ('Youssef K.', 'DSI', 'Groupe Industriel International', 'Infrastructure IT', 5,
-     'Forge3D a sécurisé notre infrastructure sur 3 sites avec une architecture Zero Trust impeccable.',
-     'YK', 'from-blue-600 to-blue-800', 'approved', TRUE, NOW()),
-    ('Leila B.', 'Responsable IT', 'PME Export', 'Migration Cloud', 5,
-     'Migration Office 365 sans aucune interruption pour nos 150 utilisateurs. Nos coûts IT ont baissé de 35%.',
-     'LB', 'from-green-600 to-green-800', 'approved', TRUE, NOW());
 
 -- ══════════════════════════════════════════════════════════════════════════════
 -- FIN DU SCHEMA
