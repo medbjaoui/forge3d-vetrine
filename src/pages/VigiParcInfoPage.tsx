@@ -4,8 +4,8 @@ import VigiParcNav from '../components/VigiParcNav';
 import ProtectedEmailLink from '../components/ProtectedEmailLink';
 import type { ReactNode } from 'react';
 
-type ClePage = 'fonctionnalites' | 'iso-27001' | 'bornes' | 'securite-confidentialite' | 'offres' | 'technologie' | 'a-propos' | 'contact' | 'mentions-legales' | 'confidentialite';
-type Section = { titre: string; texte: ReactNode; points?: string[] };
+type ClePage = 'fonctionnalites' | 'iso-27001' | 'bornes' | 'securite-confidentialite' | 'technologie' | 'a-propos' | 'contact' | 'mentions-legales' | 'confidentialite';
+type Section = { titre: string; texte: ReactNode; points?: string[]; lien?: string };
 type Page = { titre: string; description: string; sections: Section[] };
 
 const pages: Record<ClePage, Page> = {
@@ -13,9 +13,14 @@ const pages: Record<ClePage, Page> = {
     titre: 'Toutes les fonctions VigiParc',
     description: 'Un portail unique pour le parc, la sécurité, le support, les identités, la conformité et les employés.',
     sections: [
-      { titre: 'Parc et sécurité', texte: 'Inventaire Windows et Linux, Active Directory, logiciels, cycle de vie et conformité des postes.', points: ['Alertes de sécurité et isolement d’un poste', 'Campagnes de correctifs et politiques de durcissement', 'Inventaire réseau SNMP, analyses Trivy et Nuclei'] },
-      { titre: 'Support et identités', texte: 'Tickets GLPI, prise en main MeshCentral, comptes, rôles, sessions et double authentification TOTP.', points: ['Parcours d’arrivée et de départ', 'Tâches vérifiées et journalisées', 'Rôles admin IT, support, conformité et lecture'] },
-      { titre: 'Pilotage et employés', texte: 'Sauvegardes, supervision, licences hors ligne, mises à jour signées et espace employé.', points: ['Coffre compatible Bitwarden', 'Présence, mobiles Android et bornes Linux', 'Journal d’audit exportable vers un SIEM'] },
+      { titre: 'Postes Windows et Linux', texte: 'Inventaire, conformité, logiciels et cycle de vie par agents.', points: ['Windows Server non obligatoire', 'État du poste et dernier contact', 'Actions encadrées et journalisées'], lien: '/vigiparc/postes-windows' },
+      { titre: 'Gestion sans Active Directory obligatoire', texte: 'Identités applicatives, comptes locaux et politiques selon les dépendances réellement nécessaires.', points: ['Audit des usages existants', 'Transition progressive', 'Aucune promesse de remplacement intégral'], lien: '/vigiparc/sans-active-directory' },
+      { titre: 'Identités et accès', texte: 'Comptes, rôles, sessions, MFA et parcours d’arrivée ou de départ.', points: ['Rôles délimités', 'Tâches vérifiables', 'Trace des opérations'], lien: '/vigiparc/identites' },
+      { titre: 'Politiques de sécurité', texte: 'Règles de durcissement, correctifs, écarts et remédiations.', points: ['Politiques lisibles', 'Priorisation', 'Validation par l’équipe IT'], lien: '/vigiparc/politiques-securite' },
+      { titre: 'Logiciels', texte: 'Versions installées, postes concernés et préparation du cycle de vie.', points: ['Inventaire', 'Écarts de version', 'Recherche et export'], lien: '/vigiparc/logiciels' },
+      { titre: 'Cybersécurité', texte: 'Alertes, vulnérabilités et état des protections selon les connecteurs activés.', points: ['Contexte technique', 'Analyses compatibles', 'Export vers un SIEM'], lien: '/vigiparc/cybersecurite' },
+      { titre: 'Assistance informatique', texte: 'Tickets, diagnostic et prise en main à distance dans un parcours commun.', points: ['Qualification', 'Intervention encadrée', 'Clôture documentée'], lien: '/vigiparc/assistance' },
+      { titre: 'Multisite', texte: 'Périmètres et vues consolidées : cible clairement identifiée comme en préparation.', points: ['Pilote préalable', 'Responsabilités séparées', 'Déploiement progressif'], lien: '/vigiparc/multisite' },
     ],
   },
   'iso-27001': {
@@ -23,7 +28,7 @@ const pages: Record<ClePage, Page> = {
     description: 'VigiParc outille la démarche ISO 27001:2022 ; il ne certifie pas une organisation.',
     sections: [
       { titre: '93 mesures structurées', texte: 'Les mesures de l’Annexe A sont suivies dans un référentiel commun, avec responsables, états et éléments de preuve.' },
-      { titre: '33 collecteurs automatiques', texte: 'Les preuves techniques sont collectées, horodatées et hachées pour faciliter les revues sans remplacer le travail de gouvernance.' },
+      { titre: 'Collecteurs de preuves configurables', texte: 'Les collecteurs publiés dépendent de la version validée. Les preuves techniques sont horodatées et hachées sans remplacer le travail de gouvernance.' },
       { titre: 'Préparer l’audit', texte: 'Registres de risques, fournisseurs, traitements et revues d’accès, score de suivi, rapport PDF et export ZIP pour l’auditeur.' },
     ],
   },
@@ -44,15 +49,6 @@ const pages: Record<ClePage, Page> = {
       { titre: 'Flux sortants uniquement', texte: 'L’installation contacte Central en HTTPS. Central ne possède ni SSH, ni VPN, ni mot de passe et ne commande aucun poste.' },
       { titre: 'Télémétrie minimale', texte: 'La supervision Forge 3D est désactivée par défaut et ne transmet que versions, compteurs et états techniques, jamais de donnée personnelle.' },
       { titre: 'Chaîne de confiance', texte: 'Les licences et mises à jour sont signées hors ligne. Central les vérifie et les distribue sans détenir la clé privée.' },
-    ],
-  },
-  offres: {
-    titre: 'Deux offres lisibles, sans verrouillage des données',
-    description: 'Les prix restent sur devis tant que Forge 3D ne décide pas de les publier.',
-    sections: [
-      { titre: 'Essentiel', texte: 'Le socle VigiParc pour gérer le parc, la sécurité, le support, les identités et la plateforme.' },
-      { titre: 'Pro', texte: 'Le socle, plus conformité ISO, coffre, licences logicielles, présence, bornes et mobiles.' },
-      { titre: 'Règles protectrices', texte: 'Après échéance et délai de grâce, les données restent consultables et exportables en lecture seule. Elles ne sont jamais effacées.', points: ['Évaluation Pro de 30 jours', 'Dépassement toléré pendant 30 jours', 'Mise en service et accompagnement définis sur devis'] },
     ],
   },
   technologie: {
@@ -95,7 +91,8 @@ const pages: Record<ClePage, Page> = {
     titre: 'Confidentialité du site VigiParc',
     description: 'Le site ne dépose aucun cookie de suivi et ne charge aucun outil de mesure d’audience.',
     sections: [
-      { titre: 'Données du formulaire', texte: 'Nom, fonction, organisation, e-mail, téléphone facultatif, taille du parc, message et preuve de consentement sont utilisés pour répondre à la demande.' },
+      { titre: 'Données du formulaire', texte: 'Identité, société, fonction, coordonnées, pays, taille du parc, sites, infrastructure, besoins, message et preuve de consentement sont utilisés pour répondre à la demande.' },
+      { titre: 'Continuité de transmission', texte: 'Si VigiParc Central est temporairement indisponible, la demande est conservée dans une file PostgreSQL du site puis retransmise automatiquement. Le contenu est effacé de cette file après livraison et reste exclu des journaux HTTP.' },
       { titre: 'Durée et droits', texte: <>Sans contact actif, les prospects sont supprimés après trois ans. Une demande d’accès, de rectification ou de suppression peut être adressée à <ProtectedEmailLink />.</> },
       { titre: 'Cadre applicable', texte: 'Le traitement respecte la loi organique tunisienne n° 2004-63 et, pour les visiteurs européens, les principes du RGPD.' },
     ],
@@ -118,7 +115,7 @@ export default function VigiParcInfoPage({ page }: { page: ClePage }) {
       <VigiParcNav />
       <section className="section-padding bg-forge-gray">
         <div className="container-forge grid gap-6 lg:grid-cols-2">
-          {contenu.sections.map((section) => <article key={section.titre} className="premium-card"><h2 className="text-2xl font-bold text-forge-text">{section.titre}</h2><p className="mt-4 leading-7 text-forge-text-muted">{section.texte}</p>{section.points && <ul className="mt-5 space-y-3">{section.points.map((point) => <li key={point} className="flex gap-3 text-sm text-forge-text-muted"><CheckCircle2 className="mt-0.5 shrink-0 text-forge-orange" size={18} />{point}</li>)}</ul>}</article>)}
+          {contenu.sections.map((section) => <article key={section.titre} className="premium-card"><h2 className="text-2xl font-bold text-forge-text">{section.titre}</h2><p className="mt-4 leading-7 text-forge-text-muted">{section.texte}</p>{section.points && <ul className="mt-5 space-y-3">{section.points.map((point) => <li key={point} className="flex gap-3 text-sm text-forge-text-muted"><CheckCircle2 className="mt-0.5 shrink-0 text-forge-orange" size={18} />{point}</li>)}</ul>}{section.lien && <a className="mt-6 inline-flex items-center gap-2 text-sm font-bold text-orange-700" href={section.lien}>Découvrir ce domaine <ArrowRight size={16} /></a>}</article>)}
         </div>
         <div className="container-forge mt-10 flex flex-wrap gap-4">
           <a className="btn-primary" href="/vigiparc#demonstration">Demander une démonstration <ArrowRight size={16} /></a>

@@ -7,6 +7,7 @@ import pkg from 'nodemailer';
 const { createTransport } = pkg;
 import pg from 'pg';
 import dotenv from 'dotenv';
+import { createHash } from 'node:crypto';
 
 // Only load .env in development (Docker Compose provides env vars in production)
 if (process.env.NODE_ENV !== 'production') {
@@ -31,6 +32,80 @@ const poolConfig = {
   password: process.env.DB_PASSWORD || 'forge3d_password',
 };
 const pool = new Pool(poolConfig);
+const VIGIPARC_CENTRAL_URL = process.env.VIGIPARC_CENTRAL_URL || 'http://vigiparc-central:8000/api/v1/prospects';
+
+const initialiserFileVigiParc = async () => {
+  await pool.query(`
+    CREATE TABLE IF NOT EXISTS vigiparc_prospect_queue (
+      id BIGSERIAL PRIMARY KEY,
+      dedupe_key CHAR(64) UNIQUE NOT NULL,
+      payload JSONB NOT NULL,
+      status VARCHAR(20) NOT NULL DEFAULT 'pending',
+      attempts INTEGER NOT NULL DEFAULT 0,
+      next_attempt_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+      last_error_code VARCHAR(40),
+      created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+      updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+      delivered_at TIMESTAMPTZ
+    );
+    CREATE INDEX IF NOT EXISTS idx_vigiparc_queue_due
+      ON vigiparc_prospect_queue(status, next_attempt_at);
+  `);
+};
+
+const empreinteProspect = (payload) => createHash('sha256').update(JSON.stringify({
+  nom: payload.nom.trim().toLowerCase(),
+  organisation: payload.organisation.trim().toLowerCase(),
+  email: payload.email.trim().toLowerCase(),
+  telephone: payload.telephone || null,
+  postes: payload.postes,
+  message: payload.message || null,
+  jour: new Date().toISOString().slice(0, 10),
+})).digest('hex');
+
+const transmettreACentral = async (payload) => {
+  const response = await fetch(VIGIPARC_CENTRAL_URL, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(payload),
+    signal: AbortSignal.timeout(8_000),
+  });
+  if (response.ok) return;
+  const error = new Error(`central_${response.status}`);
+  error.status = response.status;
+  throw error;
+};
+
+const mettreEnAttente = async (payload, code = 'unavailable') => {
+  const result = await pool.query(
+    `INSERT INTO vigiparc_prospect_queue (dedupe_key, payload, last_error_code)
+     VALUES ($1, $2::jsonb, $3)
+     ON CONFLICT (dedupe_key) DO UPDATE SET updated_at = NOW()
+     RETURNING id`,
+    [empreinteProspect(payload), JSON.stringify(payload), String(code).slice(0, 40)]
+  );
+  return result.rows[0].id;
+};
+
+const notifierProspect = async (payload, queued) => {
+  if (!process.env.SMTP_PASSWORD) return;
+  const etat = queued ? 'mise en attente et sera transmise automatiquement' : 'transmise à notre équipe';
+  await Promise.allSettled([
+    transporter.sendMail({
+      from: `"VigiParc" <${process.env.SMTP_FROM || 'contact@forge3d.tech'}>`,
+      to: process.env.SMTP_TO || 'contact@forge3d.tech',
+      replyTo: payload.email,
+      subject: `Nouvelle demande VigiParc — ${payload.organisation}`,
+      text: `Une demande VigiParc a été ${etat}.\nOrganisation : ${payload.organisation}\nContact : ${payload.nom}\nE-mail : ${payload.email}\nParc : ${payload.postes}\n`,
+    }),
+    transporter.sendMail({
+      from: `"VigiParc" <${process.env.SMTP_FROM || 'contact@forge3d.tech'}>`,
+      to: payload.email,
+      subject: 'Votre demande VigiParc a bien été reçue',
+      text: `Bonjour ${payload.nom},\n\nVotre demande VigiParc a bien été reçue et ${etat}. Forge 3D reviendra vers vous pour préciser le périmètre.\n\nForge 3D`,
+    }),
+  ]);
+};
 
 // Test connexion DB
 pool.query('SELECT NOW()', (err, res) => {
@@ -104,6 +179,57 @@ const limiter = rateLimit({
 
 app.get('/health', (req, res) => {
   res.json({ status: 'ok', timestamp: new Date().toISOString() });
+});
+
+// ── POST /api/v1/vigiparc-prospects ─────────────────────────────────────────
+// Point d'entrée durable : transmission directe à Central, sinon file PostgreSQL.
+
+const validationProspectVigiParc = [
+  body('nom').trim().isLength({ min: 2, max: 160 }),
+  body('fonction').trim().isLength({ min: 2, max: 160 }),
+  body('organisation').trim().isLength({ min: 2, max: 200 }),
+  body('email').isEmail().normalizeEmail().isLength({ max: 254 }),
+  body('telephone').optional({ nullable: true }).trim().isLength({ max: 40 }),
+  body('postes').isIn(['<20', '20-50', '50-150', '150-500', '>500']),
+  body('message').optional({ nullable: true }).trim().isLength({ max: 4000 }),
+  body('consentement').equals('true'),
+  body('piege').optional().isLength({ max: 200 }),
+  body('duree_saisie_ms').isInt({ min: 0, max: 86_400_000 }),
+];
+
+app.post('/api/v1/vigiparc-prospects', limiter, validationProspectVigiParc, async (req, res) => {
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) return res.status(422).json({ ok: false, error: 'invalid_request' });
+
+  const payload = {
+    nom: req.body.nom,
+    fonction: req.body.fonction,
+    organisation: req.body.organisation,
+    email: req.body.email,
+    telephone: req.body.telephone || null,
+    postes: req.body.postes,
+    message: req.body.message || null,
+    consentement: true,
+    piege: req.body.piege || '',
+    duree_saisie_ms: Number(req.body.duree_saisie_ms),
+  };
+
+  // Le pot de miel et le temps minimal conservent une réponse neutre.
+  if (payload.piege || payload.duree_saisie_ms < 3_000) return res.status(202).json({ ok: true, queued: false });
+
+  try {
+    await transmettreACentral(payload);
+    void notifierProspect(payload, false);
+    return res.status(202).json({ ok: true, queued: false });
+  } catch (error) {
+    if (error.status && error.status >= 400 && error.status < 500 && error.status !== 429) {
+      return res.status(error.status).json({ ok: false, error: 'central_rejected' });
+    }
+    const queueId = await mettreEnAttente(payload, error.status ? `central_${error.status}` : 'central_unavailable');
+    console.warn(`VigiParc prospect queued: ${queueId}`);
+    void notifierProspect(payload, true);
+    return res.status(202).json({ ok: true, queued: true });
+  }
 });
 
 // ── POST /api/contact ─────────────────────────────────────────────────────────
@@ -362,6 +488,54 @@ app.get('/api/stats', async (req, res) => {
   }
 });
 
+const retraiterFileVigiParc = async () => {
+  await pool.query(
+    `UPDATE vigiparc_prospect_queue
+     SET status = 'pending', next_attempt_at = NOW(), updated_at = NOW(), last_error_code = 'worker_recovered'
+     WHERE status = 'processing' AND updated_at < NOW() - INTERVAL '15 minutes'`
+  );
+  const { rows } = await pool.query(
+    `WITH due AS (
+       SELECT id
+       FROM vigiparc_prospect_queue
+       WHERE status = 'pending' AND next_attempt_at <= NOW()
+       ORDER BY created_at ASC
+       FOR UPDATE SKIP LOCKED
+       LIMIT 20
+     )
+     UPDATE vigiparc_prospect_queue AS queue
+     SET status = 'processing', updated_at = NOW()
+     FROM due
+     WHERE queue.id = due.id
+     RETURNING queue.id, queue.payload, queue.attempts`
+  );
+  for (const item of rows) {
+    try {
+      await transmettreACentral(item.payload);
+      await pool.query(
+        `UPDATE vigiparc_prospect_queue
+         SET status = 'delivered', payload = '{}'::jsonb, delivered_at = NOW(), updated_at = NOW(), last_error_code = NULL
+         WHERE id = $1`,
+        [item.id]
+      );
+      console.info(`VigiParc prospect delivered: ${item.id}`);
+    } catch (error) {
+      const attempts = item.attempts + 1;
+      const delayMinutes = Math.min(360, 2 ** Math.min(attempts, 8));
+      await pool.query(
+        `UPDATE vigiparc_prospect_queue
+         SET status = 'pending',
+             attempts = $2,
+             next_attempt_at = NOW() + ($3 * INTERVAL '1 minute'),
+             updated_at = NOW(),
+             last_error_code = $4
+         WHERE id = $1`,
+        [item.id, attempts, delayMinutes, error.status ? `central_${error.status}` : 'central_unavailable']
+      );
+    }
+  }
+};
+
 // ══════════════════════════════════════════════════════════════════════════════
 // ERROR HANDLING
 // ══════════════════════════════════════════════════════════════════════════════
@@ -379,7 +553,11 @@ app.use((err, req, res, next) => {
 // START SERVER
 // ══════════════════════════════════════════════════════════════════════════════
 
-app.listen(PORT, '0.0.0.0', () => {
+const demarrer = async () => {
+  await initialiserFileVigiParc();
+  await retraiterFileVigiParc();
+  setInterval(() => void retraiterFileVigiParc().catch((error) => console.error('VigiParc queue worker failed:', error.message)), 60_000).unref();
+  app.listen(PORT, '0.0.0.0', () => {
   console.log(`
 ╔═══════════════════════════════════════════════════════════════╗
 ║                                                               ║
@@ -392,4 +570,10 @@ app.listen(PORT, '0.0.0.0', () => {
 ║                                                               ║
 ╚═══════════════════════════════════════════════════════════════╝
   `);
+  });
+};
+
+demarrer().catch((error) => {
+  console.error('Backend startup failed:', error.message);
+  process.exit(1);
 });

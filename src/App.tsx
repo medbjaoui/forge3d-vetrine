@@ -5,6 +5,11 @@ import Footer from './components/Footer';
 import ScrollToTop from './components/ScrollToTop';
 import VigiParcPage from './pages/VigiParcPage';
 import VigiParcInfoPage from './pages/VigiParcInfoPage';
+import VigiParcCalculatorPage from './pages/VigiParcCalculatorPage';
+import VigiParcComparePage from './pages/VigiParcComparePage';
+import VigiParcOffersPage from './pages/VigiParcOffersPage';
+import VigiParcResourcesPage from './pages/VigiParcResourcesPage';
+import VigiParcSolutionPage from './pages/VigiParcSolutionPage';
 import NotFoundPage from './pages/NotFoundPage';
 import { FORGEORIA_PATH, LEGACY_FORGEASSIST_PATH } from './lib/forgeoria';
 
@@ -23,8 +28,19 @@ const routes: Record<string, ComponentType> = {
   '/vigiparc/iso-27001': () => <VigiParcInfoPage page="iso-27001" />,
   '/vigiparc/bornes': () => <VigiParcInfoPage page="bornes" />,
   '/vigiparc/securite-confidentialite': () => <VigiParcInfoPage page="securite-confidentialite" />,
-  '/vigiparc/offres': () => <VigiParcInfoPage page="offres" />,
+  '/vigiparc/offres': VigiParcOffersPage,
   '/vigiparc/technologie': () => <VigiParcInfoPage page="technologie" />,
+  '/vigiparc/postes-windows': () => <VigiParcSolutionPage solution="postes-windows" />,
+  '/vigiparc/sans-active-directory': () => <VigiParcSolutionPage solution="sans-active-directory" />,
+  '/vigiparc/identites': () => <VigiParcSolutionPage solution="identites" />,
+  '/vigiparc/politiques-securite': () => <VigiParcSolutionPage solution="politiques-securite" />,
+  '/vigiparc/logiciels': () => <VigiParcSolutionPage solution="logiciels" />,
+  '/vigiparc/cybersecurite': () => <VigiParcSolutionPage solution="cybersecurite" />,
+  '/vigiparc/assistance': () => <VigiParcSolutionPage solution="assistance" />,
+  '/vigiparc/multisite': () => <VigiParcSolutionPage solution="multisite" />,
+  '/vigiparc/calculateur': VigiParcCalculatorPage,
+  '/vigiparc/comparatif': VigiParcComparePage,
+  '/vigiparc/ressources': VigiParcResourcesPage,
   '/vigiparc/a-propos': () => <VigiParcInfoPage page="a-propos" />,
   '/vigiparc/contact': () => <VigiParcInfoPage page="contact" />,
   '/vigiparc/mentions-legales': () => <VigiParcInfoPage page="mentions-legales" />,
