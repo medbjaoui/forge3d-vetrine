@@ -24,12 +24,15 @@ const pages: Record<ClePage, Page> = {
     ],
   },
   'iso-27001': {
-    titre: 'Préparer et prouver la conformité ISO 27001',
-    description: 'VigiParc outille la démarche ISO 27001:2022 ; il ne certifie pas une organisation.',
+    titre: 'Audit cyber en Tunisie et préparation ISO 27001',
+    description: 'Comprendre l’obligation réglementaire tunisienne et structurer une démarche ISO/IEC 27001 sans les confondre.',
     sections: [
+      { titre: 'Audit obligatoire pour les organismes concernés', texte: <>Le décret-loi tunisien n° 2023-17 soumet les systèmes d’information de certaines catégories d’organismes publics et privés à un audit de cybersécurité obligatoire et périodique. L’article 7 prévoit au moins un audit tous les douze mois, réalisé par un expert habilité. <a className="font-semibold text-orange-700 underline underline-offset-4" href="https://www.ancs.tn/fr/audit-reglementaire" target="_blank" rel="noreferrer">Consulter le cadre réglementaire de l’ANCS</a>.</> },
+      { titre: 'Qui est concerné ?', texte: 'Le texte vise notamment les organismes publics, certains opérateurs et fournisseurs numériques, les entreprises dont les réseaux sont interconnectés par télécommunications, les services d’hébergement ou de cloud, certaines activités traitant automatiquement les données personnelles de leurs usagers et les infrastructures numériques vitales. L’assujettissement exact doit être confirmé avec l’ANCS ou un expert habilité.' },
+      { titre: 'ISO 27001 n’est pas une obligation générale', texte: 'La loi impose l’audit aux organismes entrant dans son champ ; elle n’impose pas à toutes les PME d’obtenir une certification ISO/IEC 27001. La norme fournit un cadre reconnu pour organiser le système de management de la sécurité de l’information, les risques, les contrôles et l’amélioration continue.' },
       { titre: '93 mesures structurées', texte: 'Les mesures de l’Annexe A sont suivies dans un référentiel commun, avec responsables, états et éléments de preuve.' },
       { titre: 'Collecteurs de preuves configurables', texte: 'Les collecteurs publiés dépendent de la version validée. Les preuves techniques sont horodatées et hachées sans remplacer le travail de gouvernance.' },
-      { titre: 'Préparer l’audit', texte: 'Registres de risques, fournisseurs, traitements et revues d’accès, score de suivi, rapport PDF et export ZIP pour l’auditeur.' },
+      { titre: 'Préparer l’audit sans promettre la conformité', texte: 'Registres de risques, fournisseurs, traitements et revues d’accès, score de suivi, rapport PDF et export ZIP facilitent la préparation. VigiParc ne remplace ni l’expert habilité, ni l’audit réglementaire, ni l’organisme certificateur.' },
     ],
   },
   bornes: {

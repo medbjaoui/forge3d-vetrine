@@ -1,5 +1,5 @@
 import { FormEvent, useRef, useState } from 'react';
-import { ArrowRight, CheckCircle2, Database, ExternalLink, FileCheck2, LockKeyhole, MonitorCog, Server, ShieldCheck, Wrench } from 'lucide-react';
+import { ArrowRight, CheckCircle2, Database, ExternalLink, FileCheck2, Landmark, LockKeyhole, MonitorCog, Server, ShieldCheck, Wrench } from 'lucide-react';
 import Seo from '../components/Seo';
 import VigiParcNav from '../components/VigiParcNav';
 import { libelleDisponibilite, modulesVigiParc } from '../data/vigiparc-catalogue';
@@ -89,6 +89,24 @@ export default function VigiParcPage() {
           <div><p className="section-tag">Le constat</p><h2 id="problemes-vigiparc" className="section-title text-forge-text">L’IT d’une PME ne devrait pas dépendre d’un empilement opaque.</h2></div>
           <div className="grid gap-4 sm:grid-cols-2">
             {['Coûts d’infrastructure difficiles à lire', 'Outils séparés et informations dispersées', 'Opérations manuelles peu traçables', 'Visibilité limitée sur la sécurité'].map((item) => <div key={item} className="flex gap-3 rounded-2xl border border-slate-200 bg-white p-5 text-sm leading-6 text-forge-text-muted"><Wrench className="shrink-0 text-forge-orange" size={19} />{item}</div>)}
+          </div>
+        </div>
+      </section>
+
+      <section className="section-padding bg-white" aria-labelledby="cadre-tunisien-vigiparc">
+        <div className="container-forge">
+          <div className="grid gap-8 rounded-3xl border border-indigo-100 bg-indigo-50/60 p-7 sm:p-10 lg:grid-cols-[.32fr_.68fr] lg:items-center">
+            <div>
+              <span className="icon-box mb-5"><Landmark /></span>
+              <p className="section-tag">Cadre tunisien</p>
+              <p className="mt-3 text-sm font-semibold text-indigo-900">Décret-loi n° 2023-17</p>
+            </div>
+            <div>
+              <h2 id="cadre-tunisien-vigiparc" className="text-3xl font-bold text-forge-text sm:text-4xl">L’audit cyber est obligatoire pour les organismes concernés.</h2>
+              <p className="mt-5 leading-8 text-forge-text-muted">Le texte prévoit un audit de sécurité des systèmes d’information au moins tous les douze mois, réalisé par un expert habilité. La certification ISO/IEC 27001 n’est pas une obligation générale : elle peut structurer la gouvernance, les risques, les contrôles et les preuves.</p>
+              <p className="mt-4 text-sm leading-6 text-forge-text-muted">VigiParc accompagne la préparation et le suivi ; il ne remplace ni l’expert habilité, ni l’audit réglementaire, ni la certification.</p>
+              <div className="mt-7 flex flex-wrap gap-4"><a className="btn-primary" href="/vigiparc/iso-27001">Comprendre le cadre et préparer l’audit</a><a className="btn-secondary" href="https://www.ancs.tn/fr/audit-reglementaire" target="_blank" rel="noreferrer">Source officielle ANCS <ExternalLink size={15} /></a></div>
+            </div>
           </div>
         </div>
       </section>
