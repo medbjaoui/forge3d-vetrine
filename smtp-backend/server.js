@@ -8,6 +8,7 @@ const { createTransport } = pkg;
 import pg from 'pg';
 import dotenv from 'dotenv';
 import { createHash } from 'node:crypto';
+import { creerEmailsVigiParc } from './email-templates.js';
 
 // Only load .env in development (Docker Compose provides env vars in production)
 if (process.env.NODE_ENV !== 'production') {
@@ -89,20 +90,23 @@ const mettreEnAttente = async (payload, code = 'unavailable') => {
 
 const notifierProspect = async (payload, queued) => {
   if (!process.env.SMTP_PASSWORD) return;
-  const etat = queued ? 'mise en attente et sera transmise automatiquement' : 'transmise à notre équipe';
+  const emails = creerEmailsVigiParc(payload, queued);
   const resultats = await Promise.allSettled([
     transporter.sendMail({
       from: `"VigiParc" <${process.env.SMTP_FROM || 'contact@forge3d.tech'}>`,
       to: process.env.SMTP_TO || 'contact@forge3d.tech',
       replyTo: payload.email,
-      subject: `Nouvelle demande VigiParc — ${payload.organisation}`,
-      text: `Une demande VigiParc a été ${etat}.\nOrganisation : ${payload.organisation}\nContact : ${payload.nom}\nE-mail : ${payload.email}\nParc : ${payload.postes}\n`,
+      ...emails.admin,
+      disableFileAccess: true,
+      disableUrlAccess: true,
     }),
     transporter.sendMail({
       from: `"VigiParc" <${process.env.SMTP_FROM || 'contact@forge3d.tech'}>`,
       to: payload.email,
-      subject: 'Votre demande VigiParc a bien été reçue',
-      text: `Bonjour ${payload.nom},\n\nVotre demande VigiParc a bien été reçue et ${etat}. Forge 3D reviendra vers vous pour préciser le périmètre.\n\nForge 3D`,
+      replyTo: process.env.SMTP_TO || 'contact@forge3d.tech',
+      ...emails.client,
+      disableFileAccess: true,
+      disableUrlAccess: true,
     }),
   ]);
   const echecs = resultats.filter((resultat) => resultat.status === 'rejected').length;

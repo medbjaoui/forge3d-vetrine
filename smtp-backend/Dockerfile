@@ -11,7 +11,7 @@ COPY package*.json ./
 RUN npm ci --omit=dev
 
 # Copier le code source
-COPY server.js ./
+COPY server.js email-templates.js ./
 
 # Exposer le port
 EXPOSE 3001

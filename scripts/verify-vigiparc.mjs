@@ -21,6 +21,8 @@ const sitemap = lire('public/sitemap.xml');
 const coquille = lire('dist/vigiparc/index.html');
 const chargeur = lire('dist/vigiparc-bootstrap.js');
 const backend = lire('smtp-backend/server.js');
+const emails = lire('smtp-backend/email-templates.js');
+const dockerBackend = lire('smtp-backend/Dockerfile');
 const initialisation = lire('smtp-backend/init.sql');
 const sousPages = ['fonctionnalites', 'iso-27001', 'bornes', 'securite-confidentialite', 'offres', 'technologie', 'a-propos', 'contact', 'mentions-legales', 'confidentialite', 'postes-windows', 'sans-active-directory', 'identites', 'politiques-securite', 'logiciels', 'cybersecurite', 'assistance', 'multisite', 'calculateur', 'comparatif', 'ressources'];
 
@@ -43,6 +45,9 @@ exiger(nginx.includes('Strict-Transport-Security'), 'HSTS est absent.');
 exiger(nginx.includes('location = /api/v1/prospects'), 'Le proxy vers Central est absent.');
 exiger(nginx.includes('limit_req zone=vigiparc_prospects'), 'La limitation de débit du formulaire est absente.');
 exiger(backend.includes('vigiparc_prospect_queue') && backend.includes('retraiterFileVigiParc'), 'La file de secours persistante ou sa reprise automatique est absente.');
+exiger(emails.includes('Nouvelle demande commerciale') && emails.includes('Prochaine étape') && emails.includes('aucune communication commerciale'), 'Les e-mails VigiParc professionnels sont incomplets.');
+exiger(emails.includes('echapperHtml(payload.message)') && backend.includes('disableFileAccess: true') && backend.includes('disableUrlAccess: true'), 'Les e-mails VigiParc ne protègent pas correctement les contenus saisis.');
+exiger(dockerBackend.includes('email-templates.js'), 'Le modèle d’e-mail VigiParc n’est pas inclus dans l’image backend.');
 exiger(initialisation.includes('CREATE TABLE IF NOT EXISTS vigiparc_prospect_queue'), 'La table de file de secours est absente.');
 exiger(!initialisation.includes('PME Export') && !initialisation.includes('Groupe Industriel International'), 'Des faux témoignages sont encore initialisés.');
 exiger(sitemap.includes('https://forge3d.tech/vigiparc'), 'VigiParc est absent du sitemap.');
