@@ -3,7 +3,7 @@ import { Calculator, CheckCircle2, Info } from 'lucide-react';
 import Seo from '../components/Seo';
 import VigiParcNav from '../components/VigiParcNav';
 
-const euros = new Intl.NumberFormat('fr-FR', { style: 'currency', currency: 'EUR', maximumFractionDigits: 0 });
+const dinars = new Intl.NumberFormat('fr-TN', { style: 'currency', currency: 'TND', maximumFractionDigits: 0 });
 
 const nombre = (value: string) => Math.max(0, Number(value) || 0);
 
@@ -54,17 +54,17 @@ export default function VigiParcCalculatorPage() {
       <section className="section-padding bg-forge-gray">
         <div className="container-forge grid gap-8 xl:grid-cols-[1.15fr_.85fr]">
           <form className="premium-card" onSubmit={(event) => event.preventDefault()}>
-            <div className="mb-7 flex items-center gap-3"><span className="icon-box"><Calculator /></span><div><h2 className="text-2xl font-bold text-forge-text">Vos hypothèses</h2><p className="text-sm text-forge-text-muted">Montants hors taxes, dans la même devise.</p></div></div>
+            <div className="mb-7 flex items-center gap-3"><span className="icon-box"><Calculator /></span><div><h2 className="text-2xl font-bold text-forge-text">Vos hypothèses</h2><p className="text-sm text-forge-text-muted">Montants annuels hors taxes en dinars tunisiens (TND).</p></div></div>
             <div className="grid gap-5 sm:grid-cols-2">
               <label className="text-sm font-semibold text-forge-text">Nombre de postes<input className={champ} type="number" min="5" max="500" step="1" value={postes} onChange={(e) => setPostes(e.target.value)} /></label>
               <label className="text-sm font-semibold text-forge-text">Postes envisageables en bornes Linux<input className={champ} type="number" min="0" max={nombre(postes)} step="1" value={bornes} onChange={(e) => setBornes(e.target.value)} /></label>
               <label className="text-sm font-semibold text-forge-text">Nombre de sites<input className={champ} type="number" min="1" max="100" step="1" value={sites} onChange={(e) => setSites(e.target.value)} /></label>
               <label className="text-sm font-semibold text-forge-text">Durée de comparaison<select className={champ} value={duree} onChange={(e) => setDuree(e.target.value)}><option value="1">1 an</option><option value="3">3 ans</option><option value="5">5 ans</option></select></label>
-              <label className="text-sm font-semibold text-forge-text">Outils de gestion / poste / mois<input className={champ} type="number" min="0" step="0.01" inputMode="decimal" value={outilsMensuels} onChange={(e) => setOutilsMensuels(e.target.value)} /></label>
-              <label className="text-sm font-semibold text-forge-text">Licences applicables / an<input className={champ} type="number" min="0" step="1" inputMode="decimal" value={licencesAnnuelles} onChange={(e) => setLicencesAnnuelles(e.target.value)} /></label>
-              <label className="text-sm font-semibold text-forge-text">Infrastructure serveur / an<input className={champ} type="number" min="0" step="1" inputMode="decimal" value={serveursAnnuels} onChange={(e) => setServeursAnnuels(e.target.value)} /></label>
-              <label className="text-sm font-semibold text-forge-text">Support actuel / an<input className={champ} type="number" min="0" step="1" inputMode="decimal" value={supportAnnuel} onChange={(e) => setSupportAnnuel(e.target.value)} /></label>
-              <label className="text-sm font-semibold text-forge-text sm:col-span-2">Estimation VigiParc / an<input className={champ} type="number" min="0" step="1" inputMode="decimal" value={coutVigiParc} onChange={(e) => setCoutVigiParc(e.target.value)} /><span className="mt-2 block font-normal text-forge-text-muted">Demandez un devis pour remplacer cette hypothèse par une estimation Forge 3D.</span></label>
+              <label className="text-sm font-semibold text-forge-text">Outils de gestion / poste / mois (TND)<input className={champ} type="number" min="0" step="0.01" inputMode="decimal" value={outilsMensuels} onChange={(e) => setOutilsMensuels(e.target.value)} /></label>
+              <label className="text-sm font-semibold text-forge-text">Licences applicables / an (TND)<input className={champ} type="number" min="0" step="1" inputMode="decimal" value={licencesAnnuelles} onChange={(e) => setLicencesAnnuelles(e.target.value)} /></label>
+              <label className="text-sm font-semibold text-forge-text">Infrastructure serveur / an (TND)<input className={champ} type="number" min="0" step="1" inputMode="decimal" value={serveursAnnuels} onChange={(e) => setServeursAnnuels(e.target.value)} /></label>
+              <label className="text-sm font-semibold text-forge-text">Support actuel / an (TND)<input className={champ} type="number" min="0" step="1" inputMode="decimal" value={supportAnnuel} onChange={(e) => setSupportAnnuel(e.target.value)} /></label>
+              <label className="text-sm font-semibold text-forge-text sm:col-span-2">Hypothèse VigiParc / an (TND)<input className={champ} type="number" min="0" step="1" inputMode="decimal" value={coutVigiParc} onChange={(e) => setCoutVigiParc(e.target.value)} /><span className="mt-2 block font-normal text-forge-text-muted">Saisissez zéro si vous n’avez pas encore de devis, puis demandez une estimation pour compléter la comparaison.</span></label>
             </div>
           </form>
 
@@ -72,18 +72,18 @@ export default function VigiParcCalculatorPage() {
             <p className="section-tag">Résultat indicatif</p>
             <h2 className="mt-2 text-3xl font-bold">Projection sur {resultat.annees} {resultat.annees > 1 ? 'ans' : 'an'}</h2>
             <dl className="mt-8 space-y-4">
-              <div className="flex items-center justify-between border-t border-white/10 pt-4"><dt className="text-white/60">Situation actuelle / an</dt><dd className="text-xl font-bold">{euros.format(resultat.actuelAnnuel)}</dd></div>
-              <div className="flex items-center justify-between border-t border-white/10 pt-4"><dt className="text-white/60">Hypothèse VigiParc / an</dt><dd className="text-xl font-bold">{euros.format(resultat.vigiparcAnnuel)}</dd></div>
-              <div className="flex items-center justify-between border-t border-white/10 pt-4"><dt className="text-white/60">Coût actuel sur la période</dt><dd className="font-bold">{euros.format(resultat.actuelPeriode)}</dd></div>
-              <div className="flex items-center justify-between border-t border-white/10 pt-4"><dt className="text-white/60">VigiParc sur la période</dt><dd className="font-bold">{euros.format(resultat.vigiparcPeriode)}</dd></div>
-              <div className="rounded-2xl border border-forge-orange/30 bg-forge-orange/10 p-5"><dt className="text-sm text-white/65">Écart potentiel</dt><dd className={`mt-1 text-3xl font-bold ${resultat.economie < 0 ? 'text-amber-300' : 'text-emerald-300'}`}>{euros.format(resultat.economie)}</dd><p className="mt-2 text-xs text-white/55">Soit {euros.format(resultat.economiePoste)} par poste sur la période.</p></div>
+              <div className="flex items-center justify-between border-t border-white/10 pt-4"><dt className="text-white/70">Situation actuelle / an</dt><dd className="text-xl font-bold">{dinars.format(resultat.actuelAnnuel)}</dd></div>
+              <div className="flex items-center justify-between border-t border-white/10 pt-4"><dt className="text-white/70">Hypothèse VigiParc / an</dt><dd className="text-xl font-bold">{dinars.format(resultat.vigiparcAnnuel)}</dd></div>
+              <div className="flex items-center justify-between border-t border-white/10 pt-4"><dt className="text-white/70">Coût actuel sur la période</dt><dd className="font-bold">{dinars.format(resultat.actuelPeriode)}</dd></div>
+              <div className="flex items-center justify-between border-t border-white/10 pt-4"><dt className="text-white/70">VigiParc sur la période</dt><dd className="font-bold">{dinars.format(resultat.vigiparcPeriode)}</dd></div>
+              <div className="rounded-2xl border border-forge-orange/30 bg-forge-orange/10 p-5"><dt className="text-sm text-white/70">Écart potentiel</dt><dd className={`mt-1 text-3xl font-bold ${resultat.economie < 0 ? 'text-amber-300' : 'text-emerald-300'}`}>{dinars.format(resultat.economie)}</dd><p className="mt-2 text-xs text-white/70">Soit {dinars.format(resultat.economiePoste)} par poste sur la période.</p></div>
             </dl>
             <ul className="mt-7 space-y-3 text-sm leading-6 text-white/65">
               <li className="flex gap-3"><Info className="mt-1 shrink-0 text-forge-orange" size={17} />Estimation non contractuelle, avant coûts de migration, formation ou changement matériel.</li>
               <li className="flex gap-3"><CheckCircle2 className="mt-1 shrink-0 text-forge-orange" size={17} />{bornes || '0'} borne(s) envisagée(s) et {sites || '1'} site(s) sont transmis au cadrage, sans économie automatique supposée.</li>
               <li className="flex gap-3"><CheckCircle2 className="mt-1 shrink-0 text-forge-orange" size={17} />Le calcul ne considère jamais que toutes les licences Windows deviennent inutiles.</li>
             </ul>
-            <a className="btn-primary mt-8 w-full justify-center" href="/vigiparc#demonstration">Demander une estimation personnalisée</a>
+            <a className="btn-primary mt-8 w-full justify-center" href="/vigiparc/contact">Demander une estimation personnalisée</a>
           </aside>
         </div>
       </section>

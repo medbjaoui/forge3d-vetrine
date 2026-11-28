@@ -4,10 +4,10 @@ import { ForgeOriaLogo } from './BrandMark';
 import { FORGEORIA_PATH, SIGNATURE } from '../../lib/forgeoria';
 
 const steps = [
-  { icon: Inbox, label: 'Request' },
-  { icon: ScanSearch, label: 'Classify' },
-  { icon: UserCheck, label: 'Human review' },
-  { icon: ClipboardCheck, label: 'Prepared action' },
+  { icon: Inbox, label: 'Demande' },
+  { icon: ScanSearch, label: 'Classification' },
+  { icon: UserCheck, label: 'Validation humaine' },
+  { icon: ClipboardCheck, label: 'Action préparée' },
 ];
 
 /** Homepage brand block. Entrance animations run once in view; nothing loops. */
@@ -23,17 +23,16 @@ export default function HomeForgeOriaBlock() {
       <div className="forge-orb -right-32 -top-20 h-96 w-96 opacity-40" aria-hidden="true" />
       <div className="container-forge relative grid items-center gap-12 lg:grid-cols-[1.1fr_.9fr]">
         <motion.div {...inView()}>
-          <p className="section-tag">New · Business automation by FORGE3D</p>
+          <p className="section-tag">Automatisation métier par FORGE3D</p>
           <h2 id="home-forgeoria-title"><ForgeOriaLogo className="h-16 w-auto sm:h-20" fallbackClassName="text-5xl sm:text-6xl" /></h2>
-          <p className="mt-6 font-display text-3xl font-bold leading-tight sm:text-4xl"><span className="text-gradient">{SIGNATURE.en}</span></p>
-          <p className="mt-2 text-base italic text-white/50" lang="fr">{SIGNATURE.fr}</p>
-          <p className="mt-6 max-w-2xl text-lg leading-8 text-white/60">ForgeOria designs workflows that sort incoming requests, documents and messages, keep a person in control and prepare the next action. It is in development; the product page shows simulated demos only.</p>
+          <p className="mt-6 font-display text-3xl font-bold leading-tight sm:text-4xl"><span className="text-gradient">{SIGNATURE.fr}</span></p>
+          <p className="mt-6 max-w-2xl text-lg leading-8 text-white/70">ForgeOria trie les demandes, documents et messages entrants, maintient une validation humaine et prépare l’action suivante. L’offre est en développement et les démonstrations présentées sont simulées.</p>
           <div className="mt-8 flex flex-col gap-3 sm:flex-row">
-            <a href={FORGEORIA_PATH} className="btn-primary justify-center">Discover ForgeOria <ArrowRight size={17} aria-hidden="true" /></a>
-            <a href={`${FORGEORIA_PATH}#discovery`} className="btn-ghost justify-center border border-white/15">Request a discovery call</a>
+            <a href={FORGEORIA_PATH} className="btn-primary justify-center">Découvrir ForgeOria <ArrowRight size={17} aria-hidden="true" /></a>
+            <a href={`${FORGEORIA_PATH}#discovery`} className="btn-ghost justify-center border border-white/15">Demander un appel découverte</a>
           </div>
         </motion.div>
-        <ol className="relative grid gap-3" aria-label="ForgeOria workflow">
+        <ol className="relative grid gap-3" aria-label="Workflow ForgeOria">
           {steps.map(({ icon: Icon, label }, index) => (
             <motion.li key={label} {...inView(0.1 + index * 0.1)} className="flex items-center gap-4 rounded-2xl border border-white/10 bg-white/[.04] p-4">
               <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-forge-orange/15 text-forge-orange"><Icon size={20} aria-hidden="true" /></span>

@@ -7,6 +7,7 @@ import VigiParcPage from './pages/VigiParcPage';
 import VigiParcInfoPage from './pages/VigiParcInfoPage';
 import VigiParcCalculatorPage from './pages/VigiParcCalculatorPage';
 import VigiParcComparePage from './pages/VigiParcComparePage';
+import VigiParcContactPage from './pages/VigiParcContactPage';
 import VigiParcOffersPage from './pages/VigiParcOffersPage';
 import VigiParcResourcesPage from './pages/VigiParcResourcesPage';
 import VigiParcSolutionPage from './pages/VigiParcSolutionPage';
@@ -42,7 +43,7 @@ const routes: Record<string, ComponentType> = {
   '/vigiparc/comparatif': VigiParcComparePage,
   '/vigiparc/ressources': VigiParcResourcesPage,
   '/vigiparc/a-propos': () => <VigiParcInfoPage page="a-propos" />,
-  '/vigiparc/contact': () => <VigiParcInfoPage page="contact" />,
+  '/vigiparc/contact': VigiParcContactPage,
   '/vigiparc/mentions-legales': () => <VigiParcInfoPage page="mentions-legales" />,
   '/vigiparc/confidentialite': () => <VigiParcInfoPage page="confidentialite" />,
 };
@@ -76,12 +77,12 @@ export default function App({ initialPath }: AppProps = {}) {
   }, [path, redirectTo]);
 
   if (redirectTo) {
-    return <p className="p-8 text-center text-sm text-forge-text-muted">Redirecting to <a href={redirectTo} className="font-semibold text-forge-orange">ForgeOria</a>…</p>;
+    return <p className="p-8 text-center text-sm text-forge-text-muted">Redirection vers <a href={redirectTo} className="font-semibold text-forge-orange">ForgeOria</a>…</p>;
   }
 
   return (
     <div className="min-h-screen bg-white">
-      <a href="#main-content" className="skip-link">Skip to content</a>
+      <a href="#main-content" className="skip-link">Aller au contenu</a>
       <Header currentPath={path} />
       <main id="main-content" className={path.startsWith('/vigiparc') ? 'vigiparc-shell' : undefined}><Suspense fallback={null}><Page /></Suspense></main>
       <Footer />

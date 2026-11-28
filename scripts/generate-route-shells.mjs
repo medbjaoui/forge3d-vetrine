@@ -58,6 +58,10 @@ let ready=false;
 let loading;
 const load=()=>loading??=(import(entry).then(()=>{ready=true;}));
 document.querySelectorAll('.reveal').forEach((element)=>element.classList.add('visible'));
+void load();
+document.addEventListener('focusin',(event)=>{
+  if(!ready&&event.target instanceof Element&&event.target.closest('form')) void load();
+},true);
 document.addEventListener('click',async(event)=>{
   if(ready) return;
   const target=event.target instanceof Element?event.target.closest('header button,button[type="submit"],a.protected-email'):null;
@@ -78,6 +82,7 @@ document.addEventListener('submit',async(event)=>{
 `;
 
 await writeFile('dist/vigiparc-bootstrap.js', bootstrap);
+const bootstrapVersion = clientEntry.match(/index-([A-Za-z0-9_-]+)\.js$/)?.[1] ?? 'current';
 
 for (const [route, meta] of Object.entries(routes)) {
   const url = `https://forge3d.tech/${route}`;
@@ -95,7 +100,10 @@ for (const [route, meta] of Object.entries(routes)) {
   if (route.startsWith('vigiparc')) {
     html = html
       .replace('<div id="root"></div>', `<div id="root">${render(`/${route}`)}</div>`)
-      .replace(/<script type="module"[^>]+src="[^"]+"[^>]*><\/script>/, '<script type="module" src="/vigiparc-bootstrap.js"></script>')
+      .replace(
+        /<script type="module"[^>]+src="[^"]+"[^>]*><\/script>/,
+        `<script type="module" src="/vigiparc-bootstrap.js?v=${bootstrapVersion}"></script>`,
+      )
       .replace(/\s*<link rel="modulepreload"[^>]*>/g, '');
   }
 

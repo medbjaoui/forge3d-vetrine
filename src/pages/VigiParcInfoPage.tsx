@@ -121,7 +121,7 @@ export default function VigiParcInfoPage({ page }: { page: ClePage }) {
           {contenu.sections.map((section) => <article key={section.titre} className="premium-card"><h2 className="text-2xl font-bold text-forge-text">{section.titre}</h2><p className="mt-4 leading-7 text-forge-text-muted">{section.texte}</p>{section.points && <ul className="mt-5 space-y-3">{section.points.map((point) => <li key={point} className="flex gap-3 text-sm text-forge-text-muted"><CheckCircle2 className="mt-0.5 shrink-0 text-forge-orange" size={18} />{point}</li>)}</ul>}{section.lien && <a className="mt-6 inline-flex items-center gap-2 text-sm font-bold text-orange-700" href={section.lien}>Découvrir ce domaine <ArrowRight size={16} /></a>}</article>)}
         </div>
         <div className="container-forge mt-10 flex flex-wrap gap-4">
-          <a className="btn-primary" href="/vigiparc#demonstration">Demander une démonstration <ArrowRight size={16} /></a>
+          <a className="btn-primary" href="/vigiparc/contact">Demander une démonstration <ArrowRight size={16} /></a>
           <a className="btn-secondary" href="/vigiparc/confidentialite">Lire la politique de confidentialité</a>
         </div>
       </section>

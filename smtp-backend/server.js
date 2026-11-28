@@ -90,7 +90,7 @@ const mettreEnAttente = async (payload, code = 'unavailable') => {
 const notifierProspect = async (payload, queued) => {
   if (!process.env.SMTP_PASSWORD) return;
   const etat = queued ? 'mise en attente et sera transmise automatiquement' : 'transmise à notre équipe';
-  await Promise.allSettled([
+  const resultats = await Promise.allSettled([
     transporter.sendMail({
       from: `"VigiParc" <${process.env.SMTP_FROM || 'contact@forge3d.tech'}>`,
       to: process.env.SMTP_TO || 'contact@forge3d.tech',
@@ -105,6 +105,12 @@ const notifierProspect = async (payload, queued) => {
       text: `Bonjour ${payload.nom},\n\nVotre demande VigiParc a bien été reçue et ${etat}. Forge 3D reviendra vers vous pour préciser le périmètre.\n\nForge 3D`,
     }),
   ]);
+  const echecs = resultats.filter((resultat) => resultat.status === 'rejected').length;
+  if (echecs > 0) {
+    console.error(`VigiParc email delivery failed: ${echecs}/2`);
+    return;
+  }
+  console.log('VigiParc email delivery succeeded: admin=1 requester=1');
 };
 
 // Test connexion DB

@@ -12,20 +12,22 @@ const fichiers = (dossier) => readdirSync(dossier).flatMap((nom) => {
 });
 
 const page = lire('src/pages/VigiParcPage.tsx');
+const formulaire = lire('src/components/VigiParcLeadForm.tsx');
 const pageIso = lire('src/pages/VigiParcInfoPage.tsx');
 const ressources = lire('src/pages/VigiParcResourcesPage.tsx');
 const nginx = lire('nginx.conf');
 const index = lire('index.html');
 const sitemap = lire('public/sitemap.xml');
 const coquille = lire('dist/vigiparc/index.html');
+const chargeur = lire('dist/vigiparc-bootstrap.js');
 const backend = lire('smtp-backend/server.js');
 const initialisation = lire('smtp-backend/init.sql');
 const sousPages = ['fonctionnalites', 'iso-27001', 'bornes', 'securite-confidentialite', 'offres', 'technologie', 'a-propos', 'contact', 'mentions-legales', 'confidentialite', 'postes-windows', 'sans-active-directory', 'identites', 'politiques-securite', 'logiciels', 'cybersecurite', 'assistance', 'multisite', 'calculateur', 'comparatif', 'ressources'];
 
-for (const champ of ['prenom', 'nom', 'societe', 'fonction', 'email', 'telephone', 'pays', 'sites', 'postes', 'infrastructure', 'active_directory', 'bornes_linux', 'iso_27001', 'fonctionnalites', 'message', 'consentement']) {
-  exiger(page.includes(`name="${champ}"`), `Champ du formulaire absent : ${champ}`);
+for (const champ of ['nom', 'societe', 'fonction', 'email', 'postes', 'telephone', 'pays', 'sites', 'infrastructure', 'active_directory', 'priorite', 'message', 'consentement']) {
+  exiger(formulaire.includes(`name="${champ}"`), `Champ du formulaire absent : ${champ}`);
 }
-exiger(page.includes("fetch('/api/v1/prospects'"), 'Le formulaire ne cible pas VigiParc Central.');
+exiger(formulaire.includes("fetch('/api/v1/prospects'"), 'Le formulaire ne cible pas VigiParc Central.');
 exiger(page.includes('Illustration, pas une capture produit'), 'L’aperçu schématique n’est pas signalé comme illustration.');
 exiger(page.includes('Décret-loi n° 2023-17') && page.includes('au moins tous les douze mois'), 'Le cadre tunisien de l’audit cyber est absent de la page principale.');
 exiger(pageIso.includes('ISO 27001 n’est pas une obligation générale') && pageIso.includes('expert habilité'), 'La distinction entre audit obligatoire et certification ISO est absente.');
@@ -48,8 +50,11 @@ exiger(coquille.includes('https://forge3d.tech/vigiparc'), 'La coquille SEO Vigi
 exiger(coquille.includes('SoftwareApplication') && coquille.includes('VigiParc'), 'Les données structurées sont absentes.');
 exiger(coquille.includes('Gérez votre parc IT'), 'Le contenu VigiParc doit être prérendu.');
 exiger(coquille.includes('width="55" height="56"') && coquille.includes('width="62" height="64"'), 'Les dimensions des logos doivent être réservées.');
-exiger(coquille.includes('/vigiparc-bootstrap.js') && !coquille.includes('rel="modulepreload"'), 'Le JavaScript VigiParc doit être chargé à la première interaction.');
+exiger(coquille.includes('/vigiparc-bootstrap.js?v=') && !coquille.includes('rel="modulepreload"'), 'Le chargeur VigiParc doit être versionné sans préchargement inutile.');
 exiger(existsSync(join(racine, 'dist/vigiparc-bootstrap.js')), 'Le chargeur progressif VigiParc est absent.');
+exiger(chargeur.includes('void load();'), 'VigiParc doit être hydraté avant la première saisie.');
+exiger(nginx.includes('location = /vigiparc-bootstrap.js') && nginx.includes('no-store, no-cache, must-revalidate'), 'Le chargeur VigiParc ne doit pas rester en cache entre deux déploiements.');
+exiger(formulaire.includes('performance.timeOrigin') && formulaire.includes('Math.round(Date.now() - debutSaisie.current)'), 'La durée de saisie doit survivre au prérendu et rester un entier.');
 for (const image of ['public/logo-forge3d-compact.webp', 'public/brand/forgeoria-logo.webp', 'public/favicon.png', 'public/apple-touch-icon.png']) {
   exiger(existsSync(join(racine, image)), `Image optimisée absente : ${image}`);
   exiger(statSync(join(racine, image)).size < 20_000, `Image critique trop lourde : ${image}`);
